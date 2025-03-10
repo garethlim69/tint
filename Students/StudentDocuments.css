@@ -1,0 +1,59 @@
+body {
+  font-family: 'Livvic';
+  margin: 0;
+  background-color: #fff;
+  font-size: 17px;
+}
+h2 {
+  font-size: 22px;
+  color: rgb(83, 66, 66);
+  margin-left: 65px;
+  margin-top:50px ;
+  font-weight: normal;
+}
+
+.table-container {
+  margin-top: 0px; /* Prevents overlap with fixed header */
+  padding-top: 0px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 60px; /* Absolute spacing between cells */
+  text-align: left;
+}
+.alignleft{
+  text-align: left;
+}
+th, td {
+  padding: 10px;
+  padding-right: 100px;
+  padding-left: 85px;
+  text-align:center;
+}
+
+th {
+  font-weight: bold;
+}
+
+td i {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.download-btn, .download-template-btn {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.download-btn img, .download-template-btn img {
+  width: 35px;
+  height: 35px;
+  display: block;
+}

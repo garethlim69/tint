@@ -1,0 +1,105 @@
+body{
+    margin: 0;
+    font-size: 17px;
+}
+
+.cont{
+    border-style: solid;
+    margin-bottom: 70px;
+
+}
+.content2 {
+    margin-left: 60px;
+    margin-right: 700px;
+    display: inline-block;
+}
+.content3 {
+    display: inline-block;
+}
+.StudentContactsTable
+{
+    border-collapse: collapse;
+    margin: 50px;
+    width: 90%;
+    min-width: 200px;
+}
+
+.StudentContactsTable thead th
+{
+    background-color: lightgray;
+    text-align: left;
+    padding-left: 20px;
+}
+
+.StudentContactsTable tbody td{
+   
+    padding: 7px ;
+    border-bottom: 1px solid lightgray;
+    padding-left: 19px;
+     
+}
+.createstd{
+    position: absolute;
+    left: 100px;  /* Fixed position from the left */
+    top: 100px;
+
+}
+.import{
+    position: absolute;
+    left: 1400px;  /* Fixed position from the left */
+    top: 140px;
+}
+.discard{
+    background-color:lightgray;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 20px;
+}
+.submit{
+    background-color:rgb(56, 240, 99);
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+
+.button{
+display: flex;
+flex-direction: row;
+justify-content: space-between;
+margin-top: 30px;
+margin-left: 32px;
+}
+
+.mybutton{
+    margin-right: 100px;
+    margin-top: 28px;
+    
+}
+
+.importbutton{
+    background-color:lightgray;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+    font-size: 14px;
+    border-radius: 20px;
+}
+
+
+.button_bottom{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin: 90px;
+    gap: 20px;
+}
+
+.CreateAS{
+    font-weight: normal; 
+    margin-left: 30px;
+}

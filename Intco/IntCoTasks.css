@@ -1,0 +1,141 @@
+body{
+  margin: 0;
+  font-size: 17px;
+}
+  
+  /* 页面主要内容容器 */
+  .container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    position: relative; /* 用于右上角“Student”按钮定位 */
+    margin-top: 100px;
+
+  }
+  .container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  /* Student 角色选择按钮 - 位于页面正文右上角 */
+  .role-selector {
+    position: absolute;
+    top: 10px;
+    right: 0;
+  }
+  .role-selector .dropdown {
+    padding: 10px 15px;
+    background: #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  /* 任务表格 */
+  .task-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  .task-table th {
+    text-align: left;
+    text-decoration: underline; /* 与截图一致 */
+    font-weight: normal;
+    padding-bottom: 10px;
+  }
+  .task-table th,
+  .task-table td {
+    padding: 12px;
+  }
+  .task-table tr:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+  }
+
+  /* 操作图标（编辑 / 删除） */
+  .action-icons {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+  }
+  .action-icons img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+
+  /* 加号按钮 */
+  .add-button {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+  }
+  .add-button button {
+    background: white;
+    border: 2px solid black;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  .add-button button:hover {
+    background: #f0f0f0;
+  }
+
+  /* 弹窗背景（半透明遮罩） */
+  .modal-overlay {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* 背景变暗 */
+    justify-content: center;
+    align-items: center;
+    z-index: 999; /* 使弹窗浮在最上方 */
+  }
+
+  /* 弹窗内容 */
+  .modal {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+  }
+  .modal h3 {
+    margin-bottom: 20px;
+    text-decoration: underline;
+  }
+  .modal label {
+    display: block;
+    margin-bottom: 10px;
+    text-align: left;
+  }
+  .modal input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  .cancel-btn {
+    background: #ccc;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .save-btn {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }

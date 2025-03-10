@@ -1,0 +1,179 @@
+.header{
+    display: flex;
+               flex-direction: row; 
+               border-width: 1px;
+               border-style: solid;
+               border-color: gray;
+               height: 60px;
+               justify-content: space-between;
+               background-color: red;
+               width: 100%;
+               
+}
+
+.tint_logo{
+    display: flex;
+    background-color: white;
+    align-items: center;
+    border-radius: 9px; 
+    margin-bottom: 12px;
+    margin-left: 15px;
+    margin-top: 12px;
+    flex-shrink:0 ;
+
+}
+
+.navigationbar{
+    display: flex;
+    width: 400px;
+    margin-left: 20px;
+    margin-right: 20px;
+    font-size: 22px;
+    justify-content: space-between;
+    cursor: pointer;
+
+}
+
+
+.navigationbar_link:hover .contact{
+    background-color: rgb(239, 239, 239);
+    display: block;
+
+}
+.navigationbar_link:hover{
+    background-color: rgb(239, 239, 239);
+
+}
+
+.navigationbar_link{
+    color: black;
+    height:100% ;
+    align-items: center;
+    display: flex; 
+    position: relative;
+    padding-left: 3px;
+    padding-right: 3px;
+    
+
+}
+.navigationbar_link a{
+    text-decoration: none;
+    color: black;
+    height:100% ;
+    align-items: center;
+    display: flex; 
+    padding-left: 3px;
+    padding-right: 3px;
+    justify-content: center;
+}
+
+.contact{
+    display: none;
+    position: absolute;
+    top: 100%;
+    background-color: rgb(239, 239, 239);
+    left: 0;
+    min-width: 220px;
+    z-index: 100;
+   
+}
+
+
+.contact a{
+color: black;
+text-decoration: none;
+display: block;
+padding: 10px 15px;
+
+}
+
+.contact a:hover{
+    background-color: rgb(203, 200, 200);
+
+}
+
+
+.profile{
+    display: flex;
+    background-color: white;
+    width: 40px;
+    height: 40px;   
+    justify-content: center;
+    border-radius: 100px;
+    margin-right: 10px; 
+    margin-top: 10px;   
+    margin-top: 10px;    
+    cursor: pointer; 
+    position: relative;
+    z-index: 1;
+}
+
+.profile_dropdown{
+    background-color: rgb(239, 239, 239);
+    position: absolute;
+    top: 100%;
+    min-width: 150px;
+    right: 0;
+    display: none;
+    border-radius: 10px;
+}
+
+.profile_dropdown a{
+    text-decoration: none;
+    color: black;
+    display: block;
+    padding: 10px 15px;
+
+}
+
+.profile:hover .profile_dropdown{
+    display: block;
+    background-color: rgb(239, 239, 239);
+}
+
+.profile_icon
+{
+    width: 45px;
+}
+
+
+.profile:hover{
+    background-color: rgb(216, 213, 213);
+    
+}
+
+.settingicon{
+    height: 14px;
+    margin-right: 10px;
+}
+
+.logouticon{
+    height: 12px;
+    margin-right: 16px;    
+    margin-left: 2px;
+}
+
+.profile_dropdown a:hover
+{
+    background-color: rgb(203, 200, 200);
+    border-radius: 10px;
+
+}
+
+.logo{
+    height: 24px;
+    margin-left: 6px;
+
+
+}
+
+.tint_title{
+margin-left: 10px;
+margin-right: 5px;
+font-size: 25px;
+}
+
+
+
+
+

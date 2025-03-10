@@ -1,0 +1,98 @@
+body{
+    margin: 0;
+    font-size: 17px;
+}
+.content1 {
+    font-size: 22px;
+    color: rgb(83, 66, 66);
+    margin-left: 65px;
+    margin-top:50px ;
+    font-weight: normal;
+}
+
+.textbox_container{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    margin-right: 40px;
+    
+}
+.textbox {
+
+    border-radius: 20px;
+    background-color: rgb(245, 243, 243);
+    border: 0px;
+    padding: 5px;
+}
+
+.tab{
+    margin-left: 70px;
+    width: 200px;
+    display: inline-block;
+    
+}
+.tabword{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+    text-decoration: none;
+    color: black;
+    
+}
+.tabword1{
+    margin-top: 10px;
+    margin-bottom: 10px;
+    display: block;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    
+}
+
+.image{
+    display: inline-flex;
+    width: 500px;
+    margin-left: 300px;
+}
+.imagelogo{
+    border-style: solid; 
+    border-radius: 50px;
+    width: 100px;
+    display: inline-block;
+}
+.buttonprofile{
+width: 170px;
+display: flex;
+flex-direction: column;
+
+}
+.upload{
+margin-top: 5px;
+margin-left: 10px;
+height: 40px;
+width: 170px;
+display: inline-block;
+vertical-align: top;
+cursor: pointer;
+border-radius: 10px;
+}
+.remove{
+    
+    margin-left: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 40px;
+    width: 170px;
+    display: inline-block;
+    vertical-align: top;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.overallbox1{
+    margin-top: 30px;
+    margin-left: 500px;
+    margin-bottom: 30px;
+}
+.textbox1{
+    width: 500px;
+}

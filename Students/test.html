@@ -1,0 +1,59 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>List Files in Supabase Storage</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+</head>
+<body>
+    <h2>Files in Supabase Storage</h2>
+    <ul id="file-list">Loading...</ul>
+
+    <script>
+        // Initialize Supabase Client
+        const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co"; // Replace with your Supabase URL
+        const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM" // Replace with your Supabase anon key
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+        // Define the bucket name
+        const bucketName = "documents"; // Replace with your bucket name
+
+        // Function to list files in a Supabase Storage bucket
+        async function listFiles() {
+            console.log("Fetching files from bucket:", bucketName);
+
+            // Fetch files from Supabase Storage
+            const { data, error } = await supabase.storage.from(bucketName).list("");
+
+            // Debugging logs
+            console.log("Data:", data);
+            console.log("Error:", error);
+
+            const fileListElement = document.getElementById("file-list");
+            fileListElement.innerHTML = ""; // Clear the list
+
+            if (error) {
+                fileListElement.innerHTML = `<li>Error: ${error.message}</li>`;
+                return;
+            }
+
+            if (!data || data.length === 0) {
+                fileListElement.innerHTML = "<li>No files found</li>";
+                return;
+            }
+
+            // Display files
+            data.forEach(file => {
+                const listItem = document.createElement("li");
+                listItem.textContent = file.name;
+                fileListElement.appendChild(listItem);
+            });
+        }
+
+        // Call the function on page load
+        listFiles();
+    </script>
+</body>
+</html>

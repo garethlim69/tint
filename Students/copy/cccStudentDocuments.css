@@ -1,0 +1,71 @@
+body{
+  font-family: 'Livvic';
+    margin: 0;
+    font-size: 17px;
+}
+.content1 {
+    font-size: 22px;
+    color: rgb(83, 66, 66);
+    margin-left: 65px;
+    margin-top:50px ;
+    font-weight: normal;
+}
+.templateborder{
+    width: 1200px;
+    height: 30px;
+    margin-left: 850px;
+    margin-bottom: 50px;
+    
+}
+.templateborder1{
+    margin-left: 450px;
+    margin-bottom: 10px;
+    
+}
+.template {
+    margin-left: 100px;
+    display: inline-block;
+    align-items: center;  /* Aligns vertically */
+    justify-content: center;
+    text-align: center;
+}
+.download {
+    margin-left: 330px;
+    display: inline-block; 
+    
+}
+.upload {
+    margin-left: 210px;
+    display: inline-block;
+}
+.na{
+    margin-left: 190px;
+    display: inline-block;
+}
+.docs{
+    margin-left: 100px;
+    text-align: left;
+    display: inline-block;
+}
+.docs1{
+    margin-left: 100px;
+    text-align: left;
+    display: inline-block;
+}
+.docs2{
+    margin-left: 100px;
+    text-align: left;
+    display: inline-block;
+}
+.r1a{
+  margin-left: 334px
+}
+.r1b{
+  margin-left: 222px
+}
+.r2a{
+  margin-left: 340px
+}
+.r3a{
+  margin-left: 341px
+}
