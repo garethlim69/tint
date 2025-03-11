@@ -150,8 +150,7 @@ document.getElementById("student").addEventListener("change", function () {
 
     // Function to determine the correct folder for download (to+fill / to+mark)
     function getDocumentFolder(documentType) {
-        const toFillDocuments = ["Evaluation Form", "Reflective Journal"];
-        return toFillDocuments.includes(documentType) ? "to fill" : "to mark";
+        return "to mark";
     }
 
     // Function to download student-specific documents

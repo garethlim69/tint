@@ -1,141 +1,191 @@
-body{
+/* General Styles */
+body {
+  font-family: 'Livvic';
   margin: 0;
+  background-color: #fff;
   font-size: 17px;
 }
-  
-  /* 页面主要内容容器 */
-  .container {
-    max-width: 900px;
-    margin: 40px auto;
-    padding: 20px;
-    position: relative; /* 用于右上角“Student”按钮定位 */
-    margin-top: 100px;
 
-  }
-  .container h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-  }
+.task-container {
+  position: relative;
+  width: 800px;
+  margin: 20px auto;
+}
 
-  /* Student 角色选择按钮 - 位于页面正文右上角 */
-  .role-selector {
-    position: absolute;
-    top: 10px;
-    right: 0;
-  }
-  .role-selector .dropdown {
-    padding: 10px 15px;
-    background: #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
+.task {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
 
-  /* 任务表格 */
-  .task-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .task-table th {
-    text-align: left;
-    text-decoration: underline; /* 与截图一致 */
-    font-weight: normal;
-    padding-bottom: 10px;
-  }
-  .task-table th,
-  .task-table td {
-    padding: 12px;
-  }
-  .task-table tr:not(:last-child) {
-    border-bottom: 1px solid #ddd;
-  }
+.timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+}
 
-  /* 操作图标（编辑 / 删除） */
-  .action-icons {
-    display: flex;
-    gap: 15px;
-    justify-content: flex-end;
-  }
-  .action-icons img {
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-  }
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: relative;
+  margin-right: 20px;
+  z-index: 1;
+}
 
-  /* 加号按钮 */
-  .add-button {
-    display: flex;
-    justify-content: center;
-    margin-top: 30px;
-  }
-  .add-button button {
-    background: white;
-    border: 2px solid black;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  .add-button button:hover {
-    background: #f0f0f0;
-  }
+.green { background-color: rgb(10, 204, 10); }
+.yellow { background-color: yellow; }
+.red { background-color: red; }
 
-  /* 弹窗背景（半透明遮罩） */
-  .modal-overlay {
-    display: none; /* 默认隐藏 */
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5); /* 背景变暗 */
-    justify-content: center;
-    align-items: center;
-    z-index: 999; /* 使弹窗浮在最上方 */
-  }
+.task-content {
+  flex-grow: 1;
+}
 
-  /* 弹窗内容 */
-  .modal {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    width: 400px;
-    text-align: center;
-  }
-  .modal h3 {
-    margin-bottom: 20px;
-    text-decoration: underline;
-  }
-  .modal label {
-    display: block;
-    margin-bottom: 10px;
-    text-align: left;
-  }
-  .modal input {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  .modal-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 15px;
-  }
-  .cancel-btn {
-    background: #ccc;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  .save-btn {
-    background: #4CAF50;
-    color: white;
-    border: none;
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-  }
+.date {
+  font-size: 12px;
+  color: gray;
+}
+
+/* Custom radio button */
+input[type="radio"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+}
+
+input[type="radio"]:checked::before,
+input[type="radio"].forced-checked::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Disable completed tasks radio buttons */
+input[type="radio"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+/* Simulate checked state for disabled radio buttons */
+input[type="radio"]:disabled.forced-checked {
+  background-color: transparent;
+  border: 1px solid black;
+}
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 30px;
+}
+
+.title {
+  font-size: 21px;
+  margin: 0;
+  padding-left: 15px;
+}
+h2 {
+  font-size: 22px;
+  color: rgb(83, 66, 66);
+  margin-left: 65px;
+  margin-top:50px ;
+  font-weight: normal;
+}
+h3 {
+  font-weight: normal;
+}
+.dropdown-container {
+  display: flex;
+  align-items: center;
+  padding-right: 15px;
+}
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 30px;
+}
+label {
+  margin-right: 8px;
+}
+
+.task-status {
+  font-size: 14px;
+  color: gray;
+  margin-top: 5px;
+}
+
+.task-table {
+  width: 60%;
+  border-collapse: collapse;
+  font-family: 'Livvic', sans-serif;
+}
+.alignleft{
+  text-align: left;
+}
+
+th, td {
+  padding: 30px;
+  padding-right: 100px;
+  padding-left: 85px;
+  text-align:center;
+}
+
+.edit-task {
+  font-size: 18px;
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+.table-container {
+  margin-top: 0%; /* Prevents overlap with fixed header */
+  padding-top: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+/* Modal Styling */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000; /* Ensures it appears above everything */
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay */
+}
+
+/* Modal Content */
+.modal-content {
+  background-color: white;
+  margin: 10% auto; /* Centers it vertically */
+  padding: 20px;
+  border-radius: 10px;
+  width: 30%;
+  position: relative;
+  text-align: center;
+}
+
+/* Close Button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 20px;
+  cursor: pointer;
+}

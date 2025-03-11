@@ -1,207 +1,195 @@
+<?php
+require_once '../Config/db.php';
+
+// Fetch selected role from POST request (default to "Student")
+$role = isset($_POST['role']) ? $_POST['role'] : "Student";
+
+// Map roles to database tables
+$taskTable = "";
+if ($role == "Student") {
+    $taskTable = "studenttasks";
+} elseif ($role == "Industry Supervisor") {
+    $taskTable = "istasks";
+} elseif ($role == "Academic Supervisor") {
+    $taskTable = "astasks";
+}
+
+// Fetch tasks from the database
+$tasks = [];
+if ($taskTable !== "") {
+    $stmt = $pdo->prepare("SELECT task_name, due_date FROM $taskTable");
+    $stmt->execute();
+    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+// Handle task updates
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["task_name_old"], $_POST["task_name"], $_POST["due_date"])) {
+    $oldTaskName = $_POST["task_name_old"];
+    $newTaskName = $_POST["task_name"];
+    $newDueDate = $_POST["due_date"];
+
+    $updateStmt = $pdo->prepare("UPDATE $taskTable SET task_name = ?, due_date = ? WHERE task_name = ?");
+    $updateStmt->execute([$newTaskName, $newDueDate, $oldTaskName]);
+
+    exit("Task Updated Successfully!");
+}
+?>
+
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Manage - Tasks</title>
-  <link rel="stylesheet" href="IntCoHeader.css">  
-  <link rel="stylesheet" href="IntCoTasks.css">  
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasks</title>
+  <link rel="stylesheet" href="IntCoHeader.css">
+  <link rel="stylesheet" href="IntCoTasks.css">
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
+
 <body>
-
-   <!-- navigationbar -->
-   <div class = "header"
-   >
-     <div class = "tint_logo">
-       <img class="logo" 
-       src="picture/logo.png" >
-       <p class ="tint_title">
-           t-int
-       </p>
-     </div>
-    
-     <div class = "navigationbar">
-       <div class="navigationbar_link">
-         <a href="IntCoHome.php">Home</a>
-         
-       </div>
- 
-       </div>
-     <div class="profile">
-       <img class ="profile_icon"
-       src="picture/profile.png">
-       <div class="profile_dropdown">
-           <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-           <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-          </div> 
-     </div>
-
-     
-   </div>
-
-  <!-- 主体内容 -->
-  <div class="container">
-    <h2>Manage - Tasks</h2>
-
-    <!-- 右上角 Student 按钮 -->
-    <div class="role-selector">
-      <div class="dropdown">Student ▼</div>
+  <!-- Navigation Bar -->
+  <div class="header">
+    <div class="tint_logo">
+      <img class="logo" src="picture/logo.png">
+      <p class="tint_title">t-int</p>
     </div>
 
-    <!-- 任务表格 -->
+    <div class="navigationbar">
+      <div class="navigationbar_link">
+        <a href="IntCoHome.php">Home</a>
+      </div>
+    </div>
+
+    <div class="profile">
+      <img class="profile_icon" src="picture/profile.png">
+      <div class="profile_dropdown">
+        <a href="ICProfileSetting.php"><img class="settingicon" src="picture/setting.png"> Setting</a>
+        <a href="/T-int/Intco/Intco/Login1.php"><img class="logouticon" src="picture/logout.png"> Log Out</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="title-container">
+    <h2 class="title">Documents</h2>
+    <div class="dropdown-container">
+      <label for="role">Select Role:</label>
+      <select id="role" name="role">
+        <option value="Student" <?= $role === 'Student' ? 'selected' : '' ?>>Student</option>
+        <option value="Industry Supervisor" <?= $role === 'Industry Supervisor' ? 'selected' : '' ?>>Industry Supervisor</option>
+        <option value="Academic Supervisor" <?= $role === 'Academic Supervisor' ? 'selected' : '' ?>>Academic Supervisor</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Task Table -->
+  <div class="table-container">
     <table class="task-table">
       <thead>
         <tr>
           <th>Task Name</th>
           <th>Due Date (dd/mm/yyyy)</th>
-          <th></th> <!-- 第三列留空放操作图标 -->
+          <th></th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>Complete Profile</td>
-          <td>16/05/2024</td>
-          <td class="action-icons">
-            <img src="picture/edit_icon.png" alt="Edit" class="edit-btn">
-            <img src="picture/delete_icon.png" alt="Delete">
-          </td>
-        </tr>
-        <tr>
-          <td>Submit Appraisal 1</td>
-          <td>27/05/2024</td>
-          <td class="action-icons">
-            <img src="picture/edit_icon.png" alt="Edit" class="edit-btn">
-            <img src="picture/delete_icon.png" alt="Delete">
-          </td>
-        </tr>
-        <tr>
-          <td>Submit Weekly Logsheet</td>
-          <td>05/07/2024</td>
-          <td class="action-icons">
-            <img src="picture/edit_icon.png" alt="Edit" class="edit-btn">
-            <img src="picture/delete_icon.png" alt="Delete">
-          </td>
-        </tr>
-        <tr>
-          <td>Submit Feedback Form</td>
-          <td>24/08/2024</td>
-          <td class="action-icons">
-            <img src="picture/edit_icon.png" alt="Edit" class="edit-btn">
-            <img src="picture/delete_icon.png" alt="Delete">
-          </td>
-        </tr>
-        <tr>
-          <td>Submit Self-reflection Form</td>
-          <td>16/09/2024</td>
-          <td class="action-icons">
-            <img src="picture/edit_icon.png" alt="Edit" class="edit-btn">
-            <img src="picture/delete_icon.png" alt="Delete">
-          </td>
-        </tr>
-        <tr>
-          <td>Submit Appraisal 2</td>
-          <td>29/09/2024</td>
-          <td class="action-icons">
-            <img src="picture/edit_icon.png" alt="Edit" class="edit-btn">
-            <img src="picture/delete_icon.png" alt="Delete">
-          </td>
-        </tr>
+      <tbody id="tasksContainer">
+        <?php foreach ($tasks as $task): ?>
+            <tr>
+                <td class="alignleft"><?= htmlspecialchars($task['task_name']) ?></td>
+                <td><?= htmlspecialchars($task['due_date']) ?></td>
+                <td>
+                    <button class="edit-task" 
+                        data-task="<?= htmlspecialchars($task['task_name']) ?>" 
+                        data-due="<?= htmlspecialchars($task['due_date']) ?>"><img src="picture/edit_icon.png" alt="Upload" width="35" height="35" style="cursor: pointer;"></button>
+                </td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
       </tbody>
     </table>
-
-    <!-- 添加任务按钮 -->
-    <div class="add-button">
-      <button id="addTaskBtn">+</button>
-    </div>
   </div>
-
-  <!-- “Add Task” 弹窗 -->
-  <div class="modal-overlay" id="addModal">
-    <div class="modal">
-      <h3>Add Task</h3>
-      <label for="taskName">Task Name:</label>
-      <input type="text" id="taskName" value="Task 7">
-      
-      <label for="dueDate">Due Date:</label>
-      <!-- 可用 <input type="date"> 或你自己的日期选择器 -->
-      <input type="date" id="dueDate">
-      
-      <div class="modal-buttons">
-        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
-        <button class="save-btn" onclick="saveTask()">Save</button>
-      </div>
+  <!-- Edit Task Modal -->
+  <div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Task</h2>
+        <form id="editTaskForm">
+            <input type="hidden" id="task_name_old" name="task_name_old">
+            <label>Task Name:</label>
+            <input type="text" id="task_name" name="task_name">
+            <label>Due Date:</label>
+            <input type="date" id="due_date" name="due_date">
+            <button type="submit">Save Changes</button>
+        </form>
     </div>
-  </div>
+</div>
 
-  <!-- “Edit Task” 弹窗 -->
-  <div class="modal-overlay" id="editModal">
-    <div class="modal">
-      <h3>Edit Task</h3>
-      <label for="taskName">Task Name:</label>
-      <input type="text" id="taskName" value="Task 7">
-      
-      <label for="dueDate">Due Date:</label>
-      <!-- 可用 <input type="date"> 或你自己的日期选择 UI -->
-      <input type="date" id="dueDate">
-      
-      <div class="modal-buttons">
-        <button class="cancel-btn" onclick="closeModal()">Cancel</button>
-        <button class="save-btn" onclick="saveTask()">Save</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-
-    // 打开/关闭弹窗
-    const modalOverlay = document.getElementById('editModal');
-    const editButtons = document.querySelectorAll('.edit-btn');
-
-    // 为每个编辑图标添加点击事件
-    editButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // 这里可以根据行的数据更新弹窗的值
-        // 例如: document.getElementById("taskName").value = "Complete Profile";
-        // 这里先用默认值 "Task 7"
-        modalOverlay.style.display = 'flex';
-      });
+<script>
+$(document).ready(function () {
+    // Handle Role Selection Change
+    $("#role").change(function () {
+        let selectedRole = $(this).val();
+        fetchTasks(selectedRole);
     });
 
-    
-
-    function saveTask() {
-      // 这里可以做保存逻辑，比如获取输入值后保存到后端
-      const name = document.getElementById('taskName').value;
-      const date = document.getElementById('dueDate').value;
-      alert("Task Updated:\n" + name + "\nDue: " + date);
-      closeModal();
+    function fetchTasks(role) {
+        $.ajax({
+            url: "IntCoTasks.php",
+            type: "POST",
+            data: { role: role },
+            success: function (response) {
+                $("#tasksContainer").html($(response).find("#tasksContainer").html());
+            },
+            error: function () {
+                alert("Error loading tasks.");
+            }
+        });
     }
 
-    const addModal = document.getElementById('addModal');
-    const addTaskBtn = document.getElementById('addTaskBtn');
+    // Open Edit Modal
+    $(document).on("click", ".edit-task", function () {
+        let taskName = $(this).data("task");
+        let dueDate = $(this).data("due");
 
-    // 打开“Add Task”弹窗
-    addTaskBtn.addEventListener('click', () => {
-      // 可以在这里设置默认值，或让用户填写
-      document.getElementById('taskName').value = 'Task 7';
-      document.getElementById('dueDate').value = '';
-      addModal.style.display = 'flex';
+        $("#task_name_old").val(taskName);
+        $("#task_name").val(taskName);
+        $("#due_date").val(dueDate);
+        
+        $("#editModal").show();
     });
 
-    // 关闭弹窗
-    function closeModal() {
-      modalOverlay.style.display = 'none';
-      addModal.style.display = 'none';
-    }
+    // Close Modal
+    $(".close").click(function () {
+        $("#editModal").hide();
+    });
 
-    // 点击“Save”时触发的函数（可替换为实际保存逻辑）
-    function saveTask() {
-      const name = document.getElementById('taskName').value;
-      const date = document.getElementById('dueDate').value;
-      alert("New Task Added:\n" + name + "\nDue: " + date);
-      closeModal();
-    }
-  </script>
+    // Update Task via AJAX
+    $("#editTaskForm").submit(function (e) {
+        e.preventDefault();
+
+        $.ajax({
+            url: "IntCoTasks.php",
+            type: "POST",
+            data: $(this).serialize(),
+            success: function (response) {
+                alert(response);
+                $("#editModal").hide();
+                fetchTasks($("#role").val());
+            },
+            error: function () {
+                alert("Error updating task.");
+            }
+        });
+    });
+
+    // Load tasks for the default role
+    fetchTasks($("#role").val());
+});
+</script>
 
 </body>
+
 </html>

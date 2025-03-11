@@ -1,101 +1,108 @@
-body{
-    margin: 0;
-    font-size: 17px;
+/* General Styles */
+body {
+  font-family: 'Livvic';
+  margin: 0;
+  background-color: #fff;
+  font-size: 17px;
 }
 
-.Tasks{
-    font-size: 22px;
-    color: rgb(83, 66, 66);
-    margin-left: 240px;
-    margin-top: 50px ;
-    font-weight: normal;
+.task-container {
+  position: relative;
+  width: 800px;
+  margin: 20px auto;
 }
 
-.grayline{
-    width: 10px;
-    background-color: lightgrey;
-    border-radius: 10px;  
-    margin-left: 290px;
-    
+.task {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
 }
 
-.taskflexbox{
-    height: 20px;
-    margin-top: 50px;
-    
+.timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
 }
 
-.row{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    width: calc(55vw - 50px); 
-    padding: 20px;
-    margin-bottom: 50px;
-    
-
-
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  position: relative;
+  margin-right: 20px;
+  z-index: 1;
 }
 
-.Tasks_status{
-    background-color: red;
-    height: 17px;
-    width: 17px;
-    border-radius: 10px;
-    margin-left: -24px;
-    margin-top: -20px;
-    min-width: 17px;
+.green { background-color: rgb(10, 204, 10); }
+.yellow { background-color: yellow; }
+.red { background-color: red; }
+
+.task-content {
+  flex-grow: 1;
 }
 
-
-.Tasks_name{
-    font-size: 20px;
-    margin-top: -40px;
-    margin-right: 300px;
-    text-align: left;
-    align-items: flex-start;
-    display: flex;
-    flex-direction: column;
-    width: 100%; 
-    justify-content: center;
-    margin-left: 25px;
-    min-width: 20px;
-
-        
-}
-    
-
-.duedate{
-    font-size: 13px;
-    color: gray;
+.date {
+  font-size: 12px;
+  color: gray;
 }
 
-.checkbox{
-    max-width: 20px;
-    margin-top: -40px;
-    display: block;
+/* Custom radio button */
+input[type="radio"] {
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border: 1px solid black;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
 }
 
-.checkbox input{
-    appearance: none;
-    width: 13px;
-    height: 13px;
-    border-radius: 50%;
-    border: 1px solid black;
-    cursor: pointer;
-    position: relative;
+input[type="radio"]:checked::before,
+input[type="radio"].forced-checked::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  background-color: black;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
-.checkbox input:checked::before{
-    content: "";
-    position: absolute;
-    width: 7px; 
-    height: 7px;
-    background-color: black;
-    border-radius: 50%;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%); 
-
+/* Disable completed tasks radio buttons */
+input[type="radio"]:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
 }
 
+/* Simulate checked state for disabled radio buttons */
+input[type="radio"]:disabled.forced-checked {
+  background-color: transparent;
+  border: 1px solid black;
+}
+.title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding-top: 30px;
+}
+
+.title {
+  font-size: 21px;
+  margin: 0;
+  padding-left: 15px;
+}
+h2 {
+  font-size: 22px;
+  color: rgb(83, 66, 66);
+  margin-left: 65px;
+  margin-top:50px ;
+  font-weight: normal;
+}
+h3 {
+  font-weight: normal;
+}
