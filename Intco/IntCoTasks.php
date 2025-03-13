@@ -17,9 +17,9 @@ if ($role == "Student") {
 // Fetch tasks from the database
 $tasks = [];
 if ($taskTable !== "") {
-    $stmt = $pdo->prepare("SELECT task_name, due_date FROM $taskTable");
-    $stmt->execute();
-    $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
+  $stmt = $pdo->prepare("SELECT task_name, due_date FROM $taskTable ORDER BY due_date ASC"); // Sorting by soonest due date
+  $stmt->execute();
+  $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 // Handle task updates
@@ -90,7 +90,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["task_name_old"], $_POS
       <thead>
         <tr>
           <th>Task Name</th>
-          <th>Due Date (dd/mm/yyyy)</th>
+          <th>Due Date (yyyy/mm/dd)</th>
           <th></th>
         </tr>
       </thead>

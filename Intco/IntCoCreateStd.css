@@ -64,7 +64,9 @@ body{
     cursor: pointer;
     font-size: 14px;
     border-radius: 20px;
+    
 }
+
 
 
 .button{
@@ -103,3 +105,4 @@ margin-left: 32px;
     font-weight: normal; 
     margin-left: 30px;
 }
+

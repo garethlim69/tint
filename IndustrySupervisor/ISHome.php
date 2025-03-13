@@ -1,3 +1,32 @@
+<?php
+require '../Config/db.php';
+
+// SESSION VARS
+$supervisorEmail = 'Amelia.Mitchell@samsung.com'; // Replace with actual session variable
+
+// Fetch completed tasks count
+$stmt = $pdo->prepare("SELECT completed_tasks FROM industrysupervisor WHERE email = ?");
+$stmt->execute([$supervisorEmail]);
+$supervisorData = $stmt->fetch(PDO::FETCH_ASSOC);
+$completedTasks = $supervisorData['completed_tasks'] ?? 0;
+
+// Fetch total tasks count
+$taskCountStmt = $pdo->query("SELECT COUNT(*) AS total_tasks FROM istasks");
+$totalTasks = $taskCountStmt->fetch(PDO::FETCH_ASSOC)['total_tasks'] ?? 1; // Default to 1 to avoid division by zero
+
+// Calculate progress percentage
+$progressPercentage = ($completedTasks / $totalTasks) * 100;
+$progressPercentage = round($progressPercentage, 1); // Round to 1 decimal place
+
+// Fetch latest task to be completed
+$taskStmt = $pdo->prepare("SELECT task_name, due_date FROM istasks ORDER BY due_date ASC LIMIT 1 OFFSET ?");
+$taskStmt->execute([$completedTasks]);
+$nextTask = $taskStmt->fetch(PDO::FETCH_ASSOC);
+
+// Default values if no tasks are left
+$taskName = $nextTask['task_name'] ?? "All Tasks Completed!";
+$taskDueDate = isset($nextTask['due_date']) ? date("d/m/Y", strtotime($nextTask['due_date'])) : "N/A";
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,7 +35,7 @@
     <title>Contact - Internship Supervisor</title>
   <link rel="stylesheet" href="ISheader.css">
   <link rel="stylesheet" href="ISHome_body.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
   <body>
     <!-- navigationbar -->
@@ -60,33 +89,22 @@
     Current Task
 </h2>
 
-<!-- GradeFeedBack-->
- <div class="Task_submit">
-    <div class="Task_submit_font">
-      Fill and Submit Appraisal 2
+<div class="GradeFeedBack">
+        <div class="GradeFeedBack_font">
+            <?= htmlspecialchars($taskName) ?>
+        </div>
+        <div class="duedate">
+            Due on: <?= htmlspecialchars($taskDueDate) ?>
+        </div>
     </div>
-    <div class ="duedate">
-        Due on: 24/08/2024
-    </div>
- </div>
 
  <!-- progress tracker-->
-<div class = "progress_tracker">
-    Progress Tracker
-<div class = "bar">
-    <div class = "progress"> </div>
-    
-</div>
-<div class="percentage">
-    0%</div>
-
-</div>
- <!--  chatbot-->
-    <div class="chatbot">
-        <img class ="chaticon"
-        src="picture/chatbot.png">
-       
-       
+ <div class="progress_tracker">
+        <h3>Progress Tracker</h3>
+        <div class="bar">
+            <div class="progress" style="width: <?= $progressPercentage ?>%;"></div> <!-- Dynamic progress bar -->
+        </div>
+        <div class="percentage"><?= $progressPercentage ?>%</div>
     </div>
   </body>
 </html>

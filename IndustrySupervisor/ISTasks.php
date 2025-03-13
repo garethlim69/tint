@@ -2,7 +2,7 @@
 require '../Config/db.php';
 
 // SESSION VARS
-$supervisorEmail = 'Ethan.Harris@tesla.com'; // Replace with actual session variable
+$supervisorEmail = 'Amelia.Mitchell@samsung.com'; // Replace with actual session variable
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"]) && isset($_POST["completed_tasks"])) {
     $supervisorEmail = $_POST["email"];
