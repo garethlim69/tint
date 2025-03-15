@@ -1,14 +1,7 @@
 <?php
-session_start();
-require '../Config/db.php'; // Ensure database connection
-
-// // Check if user is logged in
-// if (!isset($_SESSION['email'])) {
-//     die("Access denied. Please log in.");
-// }
-
-// $userEmail = $_SESSION['email'];
-$userEmail = "Ava.Bennett@taylors.edu.my";
+require '../Config/profpic.php'; 
+require '../Config/db.php'; 
+$userEmail =  $_SESSION['id'];
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -53,7 +46,7 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Two Section Webpage</title>
+  <title>Settings - Notifications</title>
   <link rel="stylesheet" href="ASheader.css">
   <link rel="stylesheet" href="ASSettingsNotifications.css">
   <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
@@ -94,15 +87,12 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
       </div>
     </div>
     <div class="profile">
-      <img class="profile_icon"
-        src="picture/profile.png">
+    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
       <div class="profile_dropdown">
-        <a href="ASProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-        <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-      </div>
+        <a href="ASProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+        <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+        </div>
     </div>
-
-
   </div>
 
   <div class="settings-container">
@@ -118,7 +108,7 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
     <!-- Main Content -->
     <div class="settings-content">
     <div class="profile-section">
-        <h3>Email Notifications</h3>
+        <h2>Email Notifications</h2>
         
         <!-- Task Due Date Reminder Toggle -->
         <div class="notification-setting">

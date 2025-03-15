@@ -1,6 +1,7 @@
 <?php
-
-$_SESSION['user_email'] = "Charlotte.Harrison@taylors.edu.my";
+session_start();
+// Get logged-in user's email from session
+$userEmail = $_SESSION['id'];
 // Supabase Credentials
 $supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co"; // Replace with your Supabase URL
 $supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM"; // Replace with your Supabase Anon Key
@@ -38,11 +39,6 @@ function checkProfilePictureExists($email) {
 
     return $httpCode === 200; // Returns true if file exists, false otherwise
 }
-
-// Get logged-in user's email from session
-$userEmail = $_SESSION['user_email'] ?? null;
-
-// Determine profile picture URL
 // Determine profile picture URL
 if ($userEmail) {
   $profilePicUrl = getProfilePictureUrl($userEmail);

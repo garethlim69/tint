@@ -1,8 +1,7 @@
 <?php
 require '../Config/db.php';
-
-// SESSION VARS
-$industry_supervisor_email = 'Amelia.Mitchell@samsung.com'; // Replace with actual email
+require '../Config/profpic.php';
+$industry_supervisor_email = $_SESSION['id'];
 
 $stmt = $pdo->prepare("
     SELECT DISTINCT 
@@ -35,7 +34,7 @@ $coordinators = $stmt->fetchAll(PDO::FETCH_ASSOC);
     >
       <div class = "tint_logo">
         <img class="logo" 
-        src="/picture/logo.png" >
+        src="picture/logo.png" >
         <p class ="tint_title">
             t-int
         </p>
@@ -52,7 +51,7 @@ $coordinators = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class ="contact">
             <a href="ISContactsStudent.php">Students</a>
             <a href="ISContactsIC.php">Internship Coordinator</a>
-            <a href="ISContanctAS.php">Academic Supervisor</a>
+            <a href="ISContactAS.php">Academic Supervisor</a>
         </div>
 
        </div>
@@ -66,11 +65,10 @@ $coordinators = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         </div>
       <div class="profile">
-        <img class ="profile_icon"
-        src="picture/profile.png">
+      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
         <div class="profile_dropdown">
-            <a href="ISProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-            <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+            <a href="ISProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+            <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
            </div> 
       </div>
 

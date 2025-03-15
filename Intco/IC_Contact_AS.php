@@ -1,5 +1,6 @@
 <?php
 require '../Config/db.php';
+require '../Config/profpic.php'; 
 
 $stmt = $pdo->query("SELECT name, email, phone_number, faculty FROM academicsupervisor");
 $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -9,7 +10,7 @@ $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact - IC_Contact_Student</title>
+    <title>Contacts - Academic Supervisor</title>
   <link rel="stylesheet" href="IntCoHeader.css">
   <link rel="stylesheet" href="IC_Contact_AS.css">
   <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
@@ -34,12 +35,11 @@ $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
    
          </div>
        <div class="profile">
-         <img class ="profile_icon"
-         src="picture/profile.png">
+       <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
          <div class="profile_dropdown">
-             <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-             <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-            </div> 
+             <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+             <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+             </div> 
        </div>
  
        

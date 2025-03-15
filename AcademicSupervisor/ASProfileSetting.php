@@ -1,13 +1,7 @@
 <?php
-// require "../Config/profpic.php";
-// $userEmail = $_SESSION['email'];
-
-session_start(); // Ensure session is started
-require '../Config/db.php'; // Include database connection
-
-// Get the logged-in user's email from session
-// $userEmail = $_SESSION['email'] ?? "Ava.Bennett@taylors.edu.my"; // Remove the hardcoded value in production
-$userEmail = "Ava.Bennett@taylors.edu.my";
+require '../Config/profpic.php'; 
+require '../Config/db.php';
+$userEmail =  $_SESSION['id'];
 
 // Fetch user details from the database
 $query = "SELECT name, email, faculty, phone_number FROM academicsupervisor WHERE email = :email";
@@ -40,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
       $updateStmt->bindParam(':email', $userEmail);
       
       if ($updateStmt->execute()) {
-          // ✅ Redirect to the same page to prevent form resubmission
+          //Redirect to the same page to prevent form resubmission
           header("Location: ASProfileSetting.php?success=1");
           exit();
       } else {
@@ -58,7 +52,7 @@ if (isset($_GET['success'])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Two Section Webpage</title>
+  <title>Settings - Profile</title>
   <link rel="stylesheet" href="ASheader.css">
   <link rel="stylesheet" href="ASprofile.css">
   <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
@@ -105,9 +99,9 @@ if (isset($_GET['success'])) {
         <img class="profile_icon" id="profile-picture"
           src="picture/profile.png" style="border-radius: 50%;">
         <div class="profile_dropdown">
-          <a href="ASProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-          <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-        </div>
+          <a href="ASProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+          <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+          </div>
       </div>
 
 

@@ -7,7 +7,7 @@ function hashPassword($password) {
 
 // Example: Hash and insert a password for a student (Modify for different roles)
 $email = "Ava.Bennett@taylors.edu.my"; // Replace with actual email
-$plain_password = "23857"; // Replace with actual password
+$plain_password = "12345"; // Replace with actual password
 $hashed_password = hashPassword($plain_password);
 
 try {

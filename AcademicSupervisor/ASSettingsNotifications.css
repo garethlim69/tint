@@ -169,8 +169,6 @@ input[readonly] {
 h2 {
   font-size: 22px;
   color: rgb(83, 66, 66);
-  margin-left: 65px;
-  margin-top:50px ;
   font-weight: normal;
 }
 .title-container {
@@ -307,4 +305,17 @@ input:checked + .slider {
 
 input:checked + .slider:before {
   transform: translateX(20px);
+}
+
+/* Left align all section titles inside settings */
+.profile-section h2 {
+  text-align: left;
+  width: 100%;
+  padding-bottom: 40px;
+}
+
+
+.sidebar h2{
+  margin-left: 65px;
+  margin-top:50px ;
 }

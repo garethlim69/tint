@@ -1,6 +1,8 @@
-body{
-    margin: 0;
-    font-size: 17px;
+body {
+  font-family: 'Livvic';
+  margin: 0;
+  background-color: #fff;
+  font-size: 17px;
 }
 .CurretTaskTitle{
     font-size: 22px;

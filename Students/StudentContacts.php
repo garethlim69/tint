@@ -1,8 +1,7 @@
 <?php
 require '../Config/db.php';
-
-// SESSION VARIABLES
-$student_id = '1928374';
+require '../Config/profpic.php'; 
+$student_id = $_SESSION['id'];
 $supervisor = null;
 
 if ($student_id) {
@@ -39,7 +38,7 @@ if ($student_id) {
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Academic Supervisor Home</title>
+  <title>Contacts</title>
   <link rel="stylesheet" href="StudentHeader.css">
   <link rel="stylesheet" href="StudentContacts.css">
   <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
@@ -76,12 +75,11 @@ if ($student_id) {
       </div>
     </div>
     <div class="profile">
-      <img class="profile_icon"
-        src="picture/profile.png">
+    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
       <div class="profile_dropdown">
-        <a href="StudentSettingsProfile.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-        <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-      </div>
+        <a href="StudentSettingsProfile.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+        <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+        </div>
     </div>
 
 

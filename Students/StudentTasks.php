@@ -1,8 +1,7 @@
 <?php
 require '../Config/db.php';
-
-//SESSION VARS
-$studentId = '1928374';
+require '../Config/profpic.php'; 
+$studentId = $_SESSION['id'];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["student_id"]) && isset($_POST["completed_tasks"])) {
   $studentId = intval($_POST["student_id"]);
@@ -82,12 +81,11 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
     <div class="profile">
-      <img class="profile_icon"
-        src="picture/profile.png">
+    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
       <div class="profile_dropdown">
-        <a href="StudentSettingsProfile.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-        <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-      </div>
+        <a href="StudentSettingsProfile.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+        <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+        </div>
     </div>
 
 

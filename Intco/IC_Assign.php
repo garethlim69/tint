@@ -1,7 +1,6 @@
 <?php
   require '../Config/db.php';
-
-
+  require '../Config/profpic.php'; 
 
  // Fetch Student Name and IS Name
   $stmt1 = $pdo->query("SELECT s.name AS student_name,s.student_id, s.email as student_email, io.is_email, isup.name AS is_name, isup.company_name as company
@@ -51,16 +50,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_students'])) {
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Assign & Add Student</title>
+  <title>Assign Students</title>
   <link rel="stylesheet" href="IC_Assign.css">
   <link rel="stylesheet" href="IntCoHeader.css">
-
-  
-
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- 顶部导航栏 -->
   <div class = "header"
   >
     <div class = "tint_logo">
@@ -79,18 +75,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_students'])) {
 
       </div>
     <div class="profile">
-      <img class ="profile_icon"
-      src="picture/profile.png">
+    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
       <div class="profile_dropdown">
-          <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-          <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-         </div> 
+          <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+          <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+          </div> 
     </div>
   </div>
 
-  <!-- 主内容区 (Assign 页面) -->
   <div class="container">
-    <!-- 标题 + 搜索框 + Auto-assign + Add Student -->
     <div class="title-row">
       <h2>Assign</h2>
       <div class="top-actions">
@@ -100,8 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['assign_students'])) {
         </div>
       </div>
     </div>
-
-    <!-- Academic Supervisor 表格 -->
     <table class="outer-table">
       <thead>
         <tr>

@@ -1,15 +1,10 @@
 <?php
   require '../Config/db.php';
+  require '../Config/profpic.php'; 
 
   $stmt = $pdo->query("SELECT name, email, phone_number, program_name FROM student");
   $result = $stmt ->fetchAll(PDO::FETCH_ASSOC);
  
-?>
-
-
-
-
- <?php
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -89,7 +84,7 @@ if(isset($_POST["upload"])){
                             $facultyCheck = $pdo->prepare("SELECT faculty_name FROM faculty WHERE faculty_name = :faculty");
                             $facultyCheck->execute([':faculty' => $facultyq]);
                             if (!$facultyCheck->fetch()) {
-                                $error_message = "❌ Error: The selected Faculty ($facultyq) does not exist in the database. Please check the CSV file or database records!";
+                                $error_message = "Error: The selected Faculty ($facultyq) does not exist in the database. Please check the CSV file or database records!";
                                 break; // Stop processing
                             }
 
@@ -134,11 +129,10 @@ if(isset($_POST["discard"])){
 <!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
-    <title>IntCo Create - Student</title>
+    <title>Create - Student</title>
     <link rel="stylesheet" href="IntCoHeader.css">
     <link rel="stylesheet" href="IntCoCreateStd.css">
-
-
+    <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
     <style>
         .alert{
     padding: 10px;
@@ -162,11 +156,11 @@ if(isset($_POST["discard"])){
             </div>
         </div>
         <div class="profile">
-            <img class="profile_icon" src="picture/profile.png">
+        <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
             <div class="profile_dropdown">
-                <a href="ICProfileSetting.php"><img class="settingicon" src="picture/setting.png"> Setting</a>
-                <a href="/T-int/Intco/Intco/Login1.php"><img class="logouticon" src="picture/logout.png">Log Out</a>
-            </div>
+                <a href="ICProfileSetting.php"><img class="settingicon" src="picture/setting.png">  Settings</a>
+                <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+                </div>
         </div>
     </div>
    

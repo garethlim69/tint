@@ -1,5 +1,6 @@
 <?php
 require_once '../Config/db.php';
+require '../Config/profpic.php'; 
 
 // Fetch selected role from POST request (default to "Student")
 $role = isset($_POST['role']) ? $_POST['role'] : "Student";
@@ -64,11 +65,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST["task_name_old"], $_POS
     </div>
 
     <div class="profile">
-      <img class="profile_icon" src="picture/profile.png">
-      <div class="profile_dropdown">
-        <a href="ICProfileSetting.php"><img class="settingicon" src="picture/setting.png"> Setting</a>
-        <a href="/T-int/Intco/Intco/Login1.php"><img class="logouticon" src="picture/logout.png"> Log Out</a>
-      </div>
+    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
+    <div class="profile_dropdown">
+        <a href="ICProfileSetting.php"><img class="settingicon" src="picture/setting.png">  Settings</a>
+        <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+        </div>
     </div>
   </div>
 

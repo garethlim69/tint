@@ -4,6 +4,7 @@ define("SUPABASE_URL", "https://rbborpwwkrfhkcqvacyz.supabase.co");
 define("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM");
 define("STORAGE_BUCKET", "documents");
 
+require '../Config/profpic.php'; 
 // SESSION VARIABLES
 $file_type = '.docx';
 ?>
@@ -41,12 +42,11 @@ $file_type = '.docx';
 
     </div>
     <div class="profile">
-      <img class="profile_icon"
-        src="picture/profile.png">
+    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
       <div class="profile_dropdown">
-        <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-        <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-      </div>
+        <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+        <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+        </div>
     </div>
 
 

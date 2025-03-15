@@ -1,8 +1,7 @@
 <?php
 require '../Config/db.php';
-
-// SESSION VARS
-$supervisorEmail = 'Amelia.Mitchell@samsung.com'; // Replace with actual session variable
+require '../Config/profpic.php';
+$supervisorEmail = $_SESSION['id'];
 
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"]) && isset($_POST["completed_tasks"])) {
     $supervisorEmail = $_POST["email"];
@@ -41,7 +40,7 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>IS Tasks</title>
+    <title>Tasks</title>
   <link rel="stylesheet" href="ISheader.css">
   <link rel="stylesheet" href="ISTask.css">
   <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
@@ -70,7 +69,7 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class ="contact">
             <a href="ISContactsStudent.php">Students</a>
             <a href="ISContactsIC.php">Internship Coordinator</a>
-            <a href="ISContanctAS.php">Academic Supervisor</a>
+            <a href="ISContactAS.php">Academic Supervisor</a>
         </div>
 
        </div>
@@ -84,11 +83,10 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
         </div>
       <div class="profile">
-        <img class ="profile_icon"
-        src="picture/profile.png">
+      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
         <div class="profile_dropdown">
-            <a href="ISProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-            <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+            <a href="ISProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+            <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
            </div> 
       </div>
 

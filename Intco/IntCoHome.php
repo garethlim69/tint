@@ -1,17 +1,15 @@
+<?php
+require '../Config/profpic.php'; 
+?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ICHOME</title>
+    <title>Home</title>
     <link rel="stylesheet" href="IntCoHeader.css">  
-    <link rel="stylesheet" href="IntCoHome.css">  
-    <script>
-      function toggleChat() {
-          const chatBox = document.getElementById("chat-box");
-          chatBox.style.display = chatBox.style.display === "block" ? "none" : "block";
-      }
-  </script>
+    <link rel="stylesheet" href="IntCoHome.css">
+    <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
     
@@ -34,12 +32,11 @@
    
          </div>
        <div class="profile">
-         <img class ="profile_icon"
-         src="picture/profile.png">
+       <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
          <div class="profile_dropdown">
-             <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Setting</a>
-             <a href="/T-int/Intco/Intco/Login1.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-            </div> 
+             <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+             <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+             </div> 
        </div>
  
   <!-- content -->
@@ -86,28 +83,5 @@
               </a>
           </div>
         </div>
-     
-      
-     <!-- Chat bot -->
-        <div class="chatbot" onclick="toggleChat()"> 
-          <img src="picture/chatbot.png" alt="Right Logo" class="chatbotlogo">
-       </div>
-
-     <!-- Chat Window -->
-    <div id="chat-box" class="chat-box">
-      <div class="chat-header">
-          <span>t-int AI Chatbot</span>
-          <button class="close-btn" onclick="toggleChat()">✖</button>
-      </div>
-      <div class="chat-body">
-          <p class="chat-message">Hello, I'm t-int, how can I help you?</p>
-      </div>
-      <div class="chat-footer">
-          <input type="text" placeholder="Ask t-int anything..">
-          <button>Send</button>
-      </div>
-  </div>
-
-   
 </body>
 </html>
