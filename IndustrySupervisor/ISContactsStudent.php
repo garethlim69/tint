@@ -1,3 +1,24 @@
+<?php
+require '../Config/db.php';
+
+// SESSION VARS
+$industry_supervisor_email = 'Amelia.Mitchell@samsung.com'; // Replace with actual email
+
+$stmt = $pdo->prepare("
+    SELECT 
+        s.name AS student_name, 
+        s.email AS student_email, 
+        s.phone_number AS student_phone,
+        a.name AS academic_supervisor_name
+    FROM internshipoffer io
+    JOIN student s ON io.student_id = s.student_id
+    JOIN academicsupervisor a ON io.as_email = a.email
+    WHERE io.is_email = :industry_supervisor_email
+");
+
+$stmt->execute(['industry_supervisor_email' => $industry_supervisor_email]);
+$students = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,7 +27,7 @@
     <title>Contact - Student</title>
   <link rel="stylesheet" href="ISheader.css">
   <link rel="stylesheet" href="ISContactsStudent_body.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
   <body>
     <!-- navigationbar -->
@@ -66,51 +87,25 @@
       <th>Name</th>
       <th>Email</th>
       <th>Phone No.</th>
-      <th>Company Name</th>
-      <th>Industry Supervisor</th>
+      <th>Academic Supervisor</th>
     </tr>
   </thead>
     <!-- row1 -->
      <tbody>
-    <tr >
-      <td>Colon</td>
-      <td> <a href="">1234@sd.taylors.edu.my</a></td>
-      <td>012-23456789</td>
-      <td>Shell</td>
-      <td>Maxim Dillion</td>
-    </tr>
-     <!-- row2 -->
-      <tr >
-        <td>Colon</td>
-        <td><a href="">1234@sd.taylors.edu.my</a></td>
-        <td>012-23456789</td>
-        <td>Shell</td>
-        <td>Maxim Dillion</td>
-    </tr>
-      <!-- row3 -->
-      <tr >
-        <td>Colon</td>
-        <td><a href="">1234@sd.taylors.edu.my</a></td>
-        <td>012-23456789</td>
-        <td>Shell</td>
-        <td>Maxim Dillion</td>
-    </tr>
-      <!-- row4 -->
-      <tr >
-        <td>Colon</td>
-        <td><a href="">1234@sd.taylors.edu.my</a></td>
-        <td>012-23456789</td>
-        <td>Shell</td>
-        <td>Maxim Dillion</td>
-    </tr>
-     <!-- row5 -->
-      <tr >
-        <td>Colon</td>
-        <td><a href="">1234@sd.taylors.edu.my</a></td>
-        <td>012-23456789</td>
-        <td>Shell</td>
-        <td>Maxim Dillion</td>
-    </tr>
+     <?php if (count($students) > 0): ?>
+        <?php foreach ($students as $student): ?>
+            <tr>
+                <td><?= htmlspecialchars($student['student_name']) ?></td>
+                <td><a href="mailto:<?= htmlspecialchars($student['student_email']) ?>"><?= htmlspecialchars($student['student_email']) ?></a></td>
+                <td><?= htmlspecialchars($student['student_phone']) ?></td>
+                <td><?= htmlspecialchars($student['academic_supervisor_name']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="5">No students found for this industry supervisor.</td>
+        </tr>
+    <?php endif; ?>
   </tbody>
   </table>
   </body>

@@ -1,12 +1,18 @@
+<?php
+require '../Config/db.php';
+
+$stmt = $pdo->query("SELECT name, email, phone_number, company_name FROM industrysupervisor");
+$contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Contact - IC_Contact_IS</title>
+    <title>Contacts - Industry Supervisor</title>
   <link rel="stylesheet" href="IntCoHeader.css">
   <link rel="stylesheet" href="IC_Contact_IS.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
   <body>
     <!-- navigationbar -->
@@ -44,7 +50,7 @@
 
 <!-- searchbar -->
 <div class="searchbar">
-<input type="search" placeholder="Search...">
+  <input type="search" id="searchInput" placeholder="Search...">
 </div>
 </div>
 <!-- ICContactsTables -->
@@ -54,39 +60,30 @@
       <th>Name</th>
       <th>Email</th>
       <th>Phone No.</th>
-      <th>CompanayName</th>
+      <th>Company Name</th>
     </tr>
   </thead>
-    <!-- row1 -->
-     <tbody>
-    <tr >
-      <td>Colon</td>
-      <td> <a href="">1234@sd.taylors.edu.my</a></td>
-      <td>012-23456789</td>
-      <td>Shell</td>
-    </tr>
-      <!-- row2 -->
-    <tr >
-      <td>Colon</td>
-      <td> <a href="">1234@sd.taylors.edu.my</a></td>
-      <td>012-23456789</td>
-      <td>Banana</td>
-    </tr>
-      <!-- row3 -->
-      <tr >
-        <td>Colon</td>
-        <td> <a href="">1234@sd.taylors.edu.my</a></td>
-        <td>012-23456789</td>
-        <td>Orange</td>
-      </tr>
-      <!-- row4 -->
-      <tr >
-        <td>Colon</td>
-        <td> <a href="">1234@sd.taylors.edu.my</a></td>
-        <td>012-23456789</td>
-        <td>Apple</td>
-      </tr>
-  </tbody>
+    <tbody>
+      <?php foreach ($contacts as $contact): ?>
+        <tr>
+          <td><?= htmlspecialchars($contact['name']) ?></td>
+          <td><a href="mailto:<?= htmlspecialchars($contact['email']) ?>"><?= htmlspecialchars($contact['email']) ?></a></td>
+          <td><?= htmlspecialchars($contact['phone_number']) ?></td>
+          <td><?= htmlspecialchars($contact['company_name']) ?></td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
   </table>
+  <script>
+  document.getElementById("searchInput").addEventListener("keyup", function () {
+    let filter = this.value.toLowerCase();
+    let rows = document.querySelectorAll(".ISContactsTable tbody tr");
+
+    rows.forEach(row => {
+      let text = row.textContent.toLowerCase();
+      row.style.display = text.includes(filter) ? "" : "none";
+    });
+  });
+</script>
   </body>
 </html>

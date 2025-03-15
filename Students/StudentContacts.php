@@ -1,8 +1,35 @@
 <?php
 require '../Config/db.php';
 
-$stmt = $pdo->query("SELECT name, program_name, email, phone_number FROM student");
-$contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// SESSION VARIABLES
+$student_id = '1928374';
+$supervisor = null;
+
+if ($student_id) {
+  $stmt = $pdo->prepare("SELECT 
+          isup.name AS industry_supervisor_name,
+          isup.email AS industry_supervisor_email,
+          isup.phone_number AS industry_supervisor_phone,
+
+          asup.name AS academic_supervisor_name,
+          asup.email AS academic_supervisor_email,
+          asup.phone_number AS academic_supervisor_phone,
+
+          icoor.name AS internship_coordinator_name,
+          icoor.email AS internship_coordinator_email,
+          icoor.phone_number AS internship_coordinator_phone
+      FROM internshipoffer io
+      JOIN industrysupervisor isup ON io.is_email = isup.email
+      JOIN academicsupervisor asup ON io.as_email = asup.email
+      JOIN student s ON io.student_id = s.student_id
+      LEFT JOIN internshipcoordinator icoor ON s.faculty = icoor.faculty
+      WHERE io.student_id = CAST(:student_id AS VARCHAR)");
+
+  // Ensure student_id is treated as a string
+  $stmt->bindParam(':student_id', $student_id, PDO::PARAM_STR);
+  $stmt->execute();
+  $supervisor = $stmt->fetch(PDO::FETCH_ASSOC);
+}
 ?>
 
 
@@ -15,6 +42,7 @@ $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <title>Academic Supervisor Home</title>
   <link rel="stylesheet" href="StudentHeader.css">
   <link rel="stylesheet" href="StudentContacts.css">
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -61,9 +89,6 @@ $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
   <!-- Contact -->
   <h2 class="Contacts_Students">Contacts</h2>
-  <div class="textbox_container">
-    <input class="textbox" type="text" placeholder="Search..">
-  </div>
 
   <!-- StudentContactsTables -->
   <table class="StudentContactsTable">
@@ -76,14 +101,30 @@ $contacts = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </tr>
     </thead>
     <tbody>
-      <?php foreach ($contacts as $contact): ?>
-        <tr>
-          <td><?= htmlspecialchars($contact['name']) ?></td>
-          <td><?= htmlspecialchars($contact['program_name']) ?></td>
-          <td><a href="mailto:<?= htmlspecialchars($contact['email']) ?>"><?= htmlspecialchars($contact['email']) ?></a></td>
-          <td><?= htmlspecialchars($contact['phone_number']) ?></td>
-        </tr>
-      <?php endforeach; ?>
+        <?php if ($supervisor): ?>
+            <tr>
+                <td><?= htmlspecialchars($supervisor['industry_supervisor_name']) ?></td>
+                <td>Industry Supervisor</td>
+                <td><a href="mailto:<?= htmlspecialchars($supervisor['industry_supervisor_email']) ?>"><?= htmlspecialchars($supervisor['industry_supervisor_email']) ?></a></td>
+                <td><?= htmlspecialchars($supervisor['industry_supervisor_phone']) ?></td>
+            </tr>
+            <tr>
+                <td><?= htmlspecialchars($supervisor['academic_supervisor_name']) ?></td>
+                <td>Academic Supervisor</td>
+                <td><a href="mailto:<?= htmlspecialchars($supervisor['academic_supervisor_email']) ?>"><?= htmlspecialchars($supervisor['academic_supervisor_email']) ?></a></td>
+                <td><?= htmlspecialchars($supervisor['academic_supervisor_phone']) ?></td>
+            </tr>
+            <tr>
+                <td><?= htmlspecialchars($supervisor['internship_coordinator_name']) ?></td>
+                <td>Internship Coordinator</td>
+                <td><a href="mailto:<?= htmlspecialchars($supervisor['internship_coordinator_email']) ?>"><?= htmlspecialchars($supervisor['internship_coordinator_email']) ?></a></td>
+                <td><?= htmlspecialchars($supervisor['internship_coordinator_phone']) ?></td>
+            </tr>
+        <?php else: ?>
+            <tr>
+                <td colspan="4">No supervisors found for this student.</td>
+            </tr>
+        <?php endif; ?>
     </tbody>
   </table>
 </body>

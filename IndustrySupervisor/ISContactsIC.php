@@ -1,3 +1,24 @@
+<?php
+require '../Config/db.php';
+
+// SESSION VARS
+$industry_supervisor_email = 'Amelia.Mitchell@samsung.com'; // Replace with actual email
+
+$stmt = $pdo->prepare("
+    SELECT DISTINCT 
+        ic.name AS coordinator_name, 
+        ic.email AS coordinator_email, 
+        ic.phone_number AS coordinator_phone, 
+        ic.faculty AS coordinator_faculty
+    FROM internshipcoordinator ic
+    JOIN student s ON ic.faculty = s.faculty
+    JOIN internshipoffer io ON s.student_id = io.student_id
+    WHERE io.is_email = :industry_supervisor_email
+");
+
+$stmt->execute(['industry_supervisor_email' => $industry_supervisor_email]);
+$coordinators = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,7 +27,7 @@
     <title>Contact - Internship Coordinator</title>
   <link rel="stylesheet" href="ISheader.css">
   <link rel="stylesheet" href="ISContactIC_body.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
   <body>
     <!-- navigationbar -->
@@ -71,12 +92,20 @@
   </thead>
     <!-- row1 -->
      <tbody>
-    <tr >
-      <td>Colon</td>
-      <td> <a href="">1234@sd.taylors.edu.my</a></td>
-      <td>012-23456789</td>
-      <td>Computing</td>
-    </tr>
+     <?php if (count($coordinators) > 0): ?>
+        <?php foreach ($coordinators as $coordinator): ?>
+            <tr>
+                <td><?= htmlspecialchars($coordinator['coordinator_name']) ?></td>
+                <td><a href="mailto:<?= htmlspecialchars($coordinator['coordinator_email']) ?>"><?= htmlspecialchars($coordinator['coordinator_email']) ?></a></td>
+                <td><?= htmlspecialchars($coordinator['coordinator_phone']) ?></td>
+                <td><?= htmlspecialchars($coordinator['coordinator_faculty']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="4">No internship coordinators found for this industry supervisor.</td>
+        </tr>
+    <?php endif; ?>
   </tbody>
   </table>
   </body>

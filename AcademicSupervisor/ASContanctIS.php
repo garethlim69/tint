@@ -1,3 +1,23 @@
+<?php
+require '../Config/db.php';
+
+// SESSION VARS
+$academic_supervisor_email = 'Charlotte.Harrison@taylors.edu.my'; // Replace with actual academic supervisor email
+
+$stmt = $pdo->prepare("
+    SELECT DISTINCT
+        isup.name AS industry_supervisor_name, 
+        isup.email AS industry_supervisor_email, 
+        isup.phone_number AS industry_supervisor_phone, 
+        isup.company_name
+    FROM internshipoffer io
+    JOIN industrysupervisor isup ON io.is_email = isup.email
+    WHERE io.as_email = :academic_supervisor_email
+");
+
+$stmt->execute(['academic_supervisor_email' => $academic_supervisor_email]);
+$industry_supervisors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,7 +26,7 @@
     <title>Contact - Internship Supervisor</title>
   <link rel="stylesheet" href="ASheader.css">
   <link rel="stylesheet" href="ASContactIS_body.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
   <body>
     <!-- navigationbar -->
@@ -59,10 +79,6 @@
 <div class="flexbox">
 <h2 class = "Contacts_IS">Contacts - Industry Supervisor</h2>
 
-<!-- searchbar -->
-<div class="searchbar">
-<input type="search" placeholder="Search...">
-</div>
 </div>
 <!-- ICContactsTables -->
   <table class="ISContactsTable">
@@ -71,17 +87,27 @@
       <th>Name</th>
       <th>Email</th>
       <th>Phone No.</th>
-      <th>CompnayName</th>
+      <th>Company Name</th>
     </tr>
   </thead>
     <!-- row1 -->
      <tbody>
-    <tr >
-      <td>Colon</td>
-      <td> <a href="">1234@sd.taylors.edu.my</a></td>
-      <td>012-23456789</td>
-      <td>Shell</td>
-    </tr>
+     <?php if ($industry_supervisors): ?>
+        <?php foreach ($industry_supervisors as $supervisor): ?>
+            <tr>
+                <td><?= htmlspecialchars($supervisor['industry_supervisor_name']) ?></td>
+                <td><a href="mailto:<?= htmlspecialchars($supervisor['industry_supervisor_email']) ?>">
+                    <?= htmlspecialchars($supervisor['industry_supervisor_email']) ?>
+                </a></td>
+                <td><?= htmlspecialchars($supervisor['industry_supervisor_phone']) ?></td>
+                <td><?= htmlspecialchars($supervisor['company_name']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="4">No industry supervisors found for this academic supervisor.</td>
+        </tr>
+    <?php endif; ?>
   </tbody>
   </table>
   </body>

@@ -1,3 +1,23 @@
+<?php
+require '../Config/db.php';
+
+// SESSION VARS
+$industry_supervisor_email = 'Amelia.Mitchell@samsung.com'; // Replace with actual email
+
+$stmt = $pdo->prepare("
+    SELECT DISTINCT 
+        a.name AS academic_supervisor_name, 
+        a.email AS academic_supervisor_email, 
+        a.phone_number AS academic_supervisor_phone,
+        a.faculty AS academic_supervisor_faculty
+    FROM internshipoffer io
+    JOIN academicsupervisor a ON io.as_email = a.email
+    WHERE io.is_email = :industry_supervisor_email
+");
+
+$stmt->execute(['industry_supervisor_email' => $industry_supervisor_email]);
+$academic_supervisors = $stmt->fetchAll(PDO::FETCH_ASSOC);
+?>
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -6,7 +26,7 @@
     <title>Contact - Internship Supervisor</title>
   <link rel="stylesheet" href="ISheader.css">
   <link rel="stylesheet" href="ISContactAS_body.css">
-  
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
 </head>
   <body>
     <!-- navigationbar -->
@@ -58,11 +78,6 @@
 <!-- Contact - Industry Supervisor-->
 <div class="flexbox">
   <h2 class = "Contacts_AS">Contacts - Industry Supervisor</h2>
-  
-  <!-- searchbar -->
-  <div class="searchbar">
-  <input type="search" placeholder="Search...">
-  </div>
   </div>
 
 <!-- ICContactsTables -->
@@ -77,12 +92,19 @@
   </thead>
     <!-- row1 -->
      <tbody>
-    <tr >
-      <td>Colon</td>
-      <td> <a href="">1234@sd.taylors.edu.my</a></td>
-      <td>012-23456789</td>
-      <td>Computing</td>
-    </tr>
+     <?php if (count($academic_supervisors) > 0): ?>
+        <?php foreach ($academic_supervisors as $as): ?>
+            <tr>
+                <td><?= htmlspecialchars($as['academic_supervisor_name']) ?></td>
+                <td><a href="mailto:<?= htmlspecialchars($as['academic_supervisor_email']) ?>"><?= htmlspecialchars($as['academic_supervisor_email']) ?></a></td>                <td><?= htmlspecialchars($as['academic_supervisor_phone']) ?></td>
+                <td><?= htmlspecialchars($as['academic_supervisor_faculty']) ?></td>
+            </tr>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="3">No academic supervisors found for this industry supervisor.</td>
+        </tr>
+    <?php endif; ?>
   </tbody>
   </table>
   </body>
