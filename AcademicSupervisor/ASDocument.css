@@ -67,14 +67,14 @@ td i {
 label {
   margin-right: 8px;
 }
-.download-btn, .download-template-btn {
+.download-btn, .download-template-btn, .edit-btn{
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
 }
 
-.download-btn img, .download-template-btn img {
+.download-btn img, .download-template-btn img, .edit-btn img {
   width: 35px;
   height: 35px;
   display: block;

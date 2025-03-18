@@ -84,7 +84,7 @@ $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </select>
 </div>
 </div>
-
+<p style="color: grey; text-align: right; padding-right: 20px; font-size: 15px;">(only .docx files accepted)</p>
 <div class="table-container">
     <table>
         <thead>
@@ -188,7 +188,11 @@ async function uploadFile(file, documentType, statusId) {
         return;
     }
 
-    const fileExtension = file.name.split('.').pop();
+    const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (fileExtension !== 'docx') {
+          alert("Only .docx files are allowed!");
+          return;
+        }
     const fileName = `${selectedStudentId}_${documentType}.${fileExtension}`;
     const filePath = `to mark/${fileName}`;
 

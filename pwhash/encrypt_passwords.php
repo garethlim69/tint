@@ -1,11 +1,10 @@
 <?php
-require '../Config/db.php'; // Include database connection
+require '../Config/db.php';
 
 function hashPassword($password) {
-    return password_hash($password, PASSWORD_DEFAULT); // Hash using bcrypt
+    return password_hash($password, PASSWORD_DEFAULT);
 }
 
-// Example: Hash and insert a password for a student (Modify for different roles)
 $email = "Ava.Bennett@taylors.edu.my"; // Replace with actual email
 $plain_password = "12345"; // Replace with actual password
 $hashed_password = hashPassword($plain_password);

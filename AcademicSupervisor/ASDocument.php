@@ -1,6 +1,6 @@
 <?php
 require '../Config/db.php';
-require '../Config/profpic.php'; 
+require '../Config/profpic.php';
 $as_email = $_SESSION['id'];
 
 // Fetch students linked to the academic supervisor
@@ -72,7 +72,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'], $_POST['
     echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
   }
 }
+$weighted_marks = "Incomplete"; // Default state
 
+if ($selected_student) {
+    if (!in_array(null, $student_marks, true) && !in_array("", $student_marks, true)) {
+        $weighted_marks = round(
+            ($student_marks["Evaluation Form"] / 100 * 45) +
+            ($student_marks["Reflective Journal"] / 100 * 30) +
+            ($student_marks["Weekly Logbook"] / 100 * 5) +
+            ($student_marks["Industrial Training Report"] / 100 * 5)
+        );
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -123,11 +134,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'], $_POST['
       </div>
     </div>
     <div class="profile">
-    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
+      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
       <div class="profile_dropdown">
-        <a href="ASProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+        <a href="ASProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Settings</a>
         <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-        </div>
+      </div>
     </div>
   </div>
   <div class="title-container">
@@ -147,6 +158,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'], $_POST['
 
   <div class="title2" style="padding-left: 50px;font-size: 21px;">
     <h2>To Fill and Submit</h2>
+    <p style="color: grey; text-align: right; padding-right: 20px; font-size: 15px;">(only .docx files accepted)</p>
   </div>
   <div class="table-container">
     <table>
@@ -174,6 +186,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'], $_POST['
         </tr>
       </tbody>
     </table>
+
   </div>
   <hr>
   <div class="title2" style="padding-left: 50px;font-size: 21px;">
@@ -210,166 +223,195 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'], $_POST['
 
     </table>
   </div>
-  <div id="editModal" class="modal">
-    <div class="modal-content">
-      <span class="close">&times;</span>
-      <h2>Edit Marks</h2>
-      <form id="editForm" method="POST">
-        <input type="hidden" name="student_id" id="student_id">
-        <input type="hidden" name="document" id="document">
-        <label for="marks">Marks:</label>
-        <input type="number" name="marks" id="marks" min="0" max="100" placeholder="Enter marks or leave empty for NULL">
-        <button type="submit">Save</button>
-      </form>
-    </div>
+  <hr>
+  <div class="title2" style="padding-left: 50px;font-size: 21px;">
+    <h2>Student Grades</h2>
   </div>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <td></td>
+          <td>Weighted Marks</td>
+        </tr>
+      </thead>
+      <tbody>
+      <tr>
+  <td class="alignleft">
+    <?= isset($selected_student) ? 
+        htmlspecialchars($students[array_search($selected_student, array_column($students, 'student_id'))]['name']) . 
+        " - " . $selected_student : "No Student Selected"; ?>
+  </td>
+  <td><?= is_numeric($weighted_marks) ? "$weighted_marks/85" : "Incomplete"; ?></td>
+</tr>
 
-  <script>
-    // Initialize Supabase Client
-    const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co"; // Replace with your actual Supabase URL
-    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM"; // Replace with your actual Supabase Anon Key
-    const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+      </tbody>
+    </table>
+    <div id="editModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Edit Marks</h2>
+        <form id="editForm" method="POST">
+          <input type="hidden" name="student_id" id="student_id">
+          <input type="hidden" name="document" id="document">
+          <label for="marks">Marks:</label>
+          <input type="number" name="marks" id="marks" min="0" max="100" placeholder="Enter marks or leave empty for NULL">
+          <button type="submit">Save</button>
+        </form>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
-    const bucketName = "documents"; // Ensure this matches your Supabase Storage bucket
-    let selectedStudentId = ""; // Variable to store selected student ID
+    <script>
+      // Initialize Supabase Client
+      const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co"; // Replace with your actual Supabase URL
+      const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM"; // Replace with your actual Supabase Anon Key
+      const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-    // Ensure student ID updates properly
-    document.getElementById("student").addEventListener("change", function() {
-      selectedStudentId = this.value.trim(); // Trim to remove spaces
-      console.log("Updated Selected Student ID:", selectedStudentId);
-    });
+      const bucketName = "documents"; // Ensure this matches your Supabase Storage bucket
+      let selectedStudentId = ""; // Variable to store selected student ID
 
-
-    // Function to download documents
-    async function downloadFile(documentType, folder) {
-      if (!selectedStudentId && folder !== "templates") {
-        alert("Please select a student first!");
-        return;
-      }
-
-      // File name format
-      const fileName = folder === "templates" ? `${documentType}.docx` : `${selectedStudentId}_${documentType}.docx`;
-      const filePath = `${folder}/${fileName}`;
-
-      console.log("Attempting to download:", filePath);
-
-      // Generate signed URL
-      const {
-        data,
-        error
-      } = await supabase.storage.from(bucketName).createSignedUrl(filePath, 60);
-
-      if (error) {
-        alert(`Download failed: ${error.message}`);
-        console.error("Download Error:", error);
-        return;
-      }
-
-      // Create hidden <a> tag to trigger download
-      const link = document.createElement("a");
-      link.href = data.signedUrl;
-      link.download = fileName;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
-    // Function to upload documents
-    async function uploadFile(file, documentType) {
-      if (!file) return;
-
-      // Always fetch the latest student ID
-      let studentDropdown = document.getElementById("student");
-      selectedStudentId = studentDropdown ? studentDropdown.value.trim() : "";
-
-      if (!selectedStudentId) {
-        alert("Please select a student first!");
-        return;
-      }
-
-      const fileExtension = file.name.split('.').pop();
-      const fileName = `${selectedStudentId}_${documentType}.${fileExtension}`;
-      const filePath = `to mark/${fileName}`;
-
-      console.log(`Uploading to: ${filePath}`);
-
-      const {
-        data,
-        error
-      } = await supabase.storage.from(bucketName).upload(filePath, file, {
-        upsert: true
+      // Ensure student ID updates properly
+      document.getElementById("student").addEventListener("change", function() {
+        selectedStudentId = this.value.trim(); // Trim to remove spaces
+        console.log("Updated Selected Student ID:", selectedStudentId);
       });
 
-      if (error) {
-        alert(`Upload failed: ${error.message}`);
-        console.error("Upload Error:", error);
-      } else {
-        alert(`${documentType} successfully uploaded!`);
-        console.log("Upload Successful:", data);
+
+      // Function to download documents
+      async function downloadFile(documentType, folder) {
+        if (!selectedStudentId && folder !== "templates") {
+          alert("Please select a student first!");
+          return;
+        }
+
+        // File name format
+        const fileName = folder === "templates" ? `${documentType}.docx` : `${selectedStudentId}_${documentType}.docx`;
+        const filePath = `${folder}/${fileName}`;
+
+        console.log("Attempting to download:", filePath);
+
+        // Generate signed URL
+        const {
+          data,
+          error
+        } = await supabase.storage.from(bucketName).createSignedUrl(filePath, 60);
+
+        if (error) {
+          alert(`Download failed: ${error.message}`);
+          console.error("Download Error:", error);
+          return;
+        }
+
+        // Create hidden <a> tag to trigger download
+        const link = document.createElement("a");
+        link.href = data.signedUrl;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
       }
-    }
+
+      // Function to upload documents (Allow only .docx)
+      async function uploadFile(file, documentType) {
+        if (!file) return;
+
+        // Validate file extension
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (fileExtension !== 'docx') {
+          alert("Only .docx files are allowed!");
+          return;
+        }
+
+        let studentDropdown = document.getElementById("student");
+        selectedStudentId = studentDropdown ? studentDropdown.value.trim() : "";
+
+        if (!selectedStudentId) {
+          alert("Please select a student first!");
+          return;
+        }
+
+        const fileName = `${selectedStudentId}_${documentType}.${fileExtension}`;
+        const filePath = `to mark/${fileName}`;
+
+        console.log(`Uploading to: ${filePath}`);
+
+        const {
+          data,
+          error
+        } = await supabase.storage.from(bucketName).upload(filePath, file, {
+          upsert: true
+        });
+
+        if (error) {
+          alert(`Upload failed: ${error.message}`);
+          console.error("Upload Error:", error);
+        } else {
+          alert(`${documentType} successfully uploaded!`);
+          console.log("Upload Successful:", data);
+        }
+      }
 
 
-    // Attach event listeners to download buttons
-    document.querySelectorAll('.download-btn').forEach(button => {
-      button.addEventListener("click", function() {
-        const documentType = this.getAttribute("data-document-type");
-        const folder = this.getAttribute("data-folder");
-        downloadFile(documentType, folder);
-      });
-    });
-
-    // Attach event listeners to upload inputs
-    document.querySelectorAll('.upload-input').forEach(input => {
-      input.addEventListener("change", function() {
-        const file = this.files[0];
-        const documentType = this.getAttribute("data-document-type");
-        uploadFile(file, documentType);
-      });
-    });
-
-    function updatePage() {
-      let studentId = document.getElementById("student").value;
-      window.location.href = "?student_id=" + studentId;
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-      let modal = document.getElementById("editModal");
-      let closeBtn = document.querySelector(".close");
-
-      document.querySelectorAll(".edit-btn").forEach(button => {
+      // Attach event listeners to download buttons
+      document.querySelectorAll('.download-btn').forEach(button => {
         button.addEventListener("click", function() {
-          let studentId = this.getAttribute("data-student-id");
-          let documentName = this.getAttribute("data-document");
+          const documentType = this.getAttribute("data-document-type");
+          const folder = this.getAttribute("data-folder");
+          downloadFile(documentType, folder);
+        });
+      });
 
-          let studentIdField = document.getElementById("student_id");
-          let documentField = document.getElementById("document");
+      // Attach event listeners to upload inputs
+      document.querySelectorAll('.upload-input').forEach(input => {
+        input.addEventListener("change", function() {
+          const file = this.files[0];
+          const documentType = this.getAttribute("data-document-type");
+          uploadFile(file, documentType);
+        });
+      });
 
-          if (studentIdField && documentField) {
-            studentIdField.value = studentId;
-            documentField.value = documentName;
-            modal.style.display = "block";
+      function updatePage() {
+        let studentId = document.getElementById("student").value;
+        window.location.href = "?student_id=" + studentId;
+      }
+
+      document.addEventListener("DOMContentLoaded", function() {
+        let modal = document.getElementById("editModal");
+        let closeBtn = document.querySelector(".close");
+
+        document.querySelectorAll(".edit-btn").forEach(button => {
+          button.addEventListener("click", function() {
+            let studentId = this.getAttribute("data-student-id");
+            let documentName = this.getAttribute("data-document");
+
+            let studentIdField = document.getElementById("student_id");
+            let documentField = document.getElementById("document");
+
+            if (studentIdField && documentField) {
+              studentIdField.value = studentId;
+              documentField.value = documentName;
+              modal.style.display = "block";
+            }
+          });
+        });
+
+        closeBtn.addEventListener("click", function() {
+          modal.style.display = "none";
+        });
+
+        window.addEventListener("click", function(event) {
+          if (event.target === modal) {
+            modal.style.display = "none";
           }
         });
       });
 
-      closeBtn.addEventListener("click", function() {
-        modal.style.display = "none";
-      });
-
-      window.addEventListener("click", function(event) {
-        if (event.target === modal) {
-          modal.style.display = "none";
-        }
-      });
-    });
-
-    function updatePage() {
-      let studentId = document.getElementById("student").value;
-      window.location.href = "?student_id=" + studentId;
-    }
-  </script>
+      function updatePage() {
+        let studentId = document.getElementById("student").value;
+        window.location.href = "?student_id=" + studentId;
+      }
+    </script>
 
 </body>
 

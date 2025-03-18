@@ -1,249 +1,212 @@
 <?php
-  require '../Config/db.php';
-  require '../Config/profpic.php'; 
+require '../Config/db.php';
+require '../Config/profpic.php';
 
-  $stmt = $pdo->query("SELECT name, email, phone_number, program_name FROM student");
-  $result = $stmt ->fetchAll(PDO::FETCH_ASSOC);
- 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+if (isset($_POST["upload"])) {
+  if ($_FILES["fileToUpload"]["error"] == UPLOAD_ERR_NO_FILE) {
+    $error_message = "Please select a file to upload!";
+  } else {
+    $file = $_FILES["fileToUpload"];
+    $fileTmpName = $file["tmp_name"];
+    $fileExt = pathinfo($file["name"], PATHINFO_EXTENSION);
 
-$error_message = "";  // Variable to store error messages
-
-if(isset($_POST["upload"])){
-    if ($_FILES["fileToUpload"]["error"] == UPLOAD_ERR_NO_FILE) {
-        $error_message = "Please select a file to upload!";
+    if (strtolower($fileExt) !== 'csv') {
+      $error_message = "This file type is not allowed. Please upload a CSV file.";
     } else {
-        $file = $_FILES["fileToUpload"];
-        $fileTmpName = $file["tmp_name"];
-        $fileError = $file["error"];
+      if (($fileload = fopen($fileTmpName, 'r')) !== false) {
+        // Read and ignore the header row
+        $header = fgetcsv($fileload, 0, ",");
 
-        $fileExt = pathinfo($file["name"], PATHINFO_EXTENSION);
-        $allowedType = ['csv'];
+        $_SESSION['csv_data'] = []; // Store data for preview
 
-        if (in_array(strtolower($fileExt), $allowedType)) {
-            if ($fileError === 0) {
-                // Open the temporary file directly
-                if (($fileload = fopen($fileTmpName, 'r')) !== false) {
-                    // Skip unrelated rows to find the header
-                    while (($header = fgetcsv($fileload, 0, ",")) !== false) {
-                        if (count(array_filter($header)) > 1) 
-                            break;
-                    }
+        while (($data = fgetcsv($fileload, 0, ",")) !== false) {
+          // Map CSV columns to variables
+          $student_id = trim($data[3]); // Student ID
+          $name = trim($data[2]); // Student Name
+          $email = trim($data[7]); // Taylor's Official Email
+          $phone_number = trim($data[8]); // Mobile No
+          $program_name = trim($data[5]); // Programme
+          $company_supervisor_name = trim($data[11]); // Company Supervisor
+          $industry_supervisor_email = trim($data[12]); // Email Address
+          $company_name = trim($data[9]); // Company
 
-                    // Target column indexes
-                    $targetColumnIndex = [
-                        'name' => -1, 'studentid' => -1, 'email' => -1, 'phone' => -1,  
-                        'program' => -1, 'password' => -1, 'faculty'=> -1  
-                    ];
-                    $studentid = ["student_id", "id", "stid", "std_id", "Student #"];
-                    $phonenum = ["Mobile No", "phone", "contact num"];
+          $password = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
 
-                    foreach ($header as $index => $colName) {
-                        if (stripos($colName, "name") !== false) $targetColumnIndex['name'] = $index;
-                        foreach ($studentid as $studentTerm) {
-                            if (stripos($colName, $studentTerm) !== false) {
-                                $targetColumnIndex['studentid'] = $index; break;
-                            }
-                        }
-                        if (stripos($colName, "email") !== false) $targetColumnIndex['email'] = $index;
-                        foreach ($phonenum as $studentphone) {
-                            if (stripos($colName, $studentphone) !== false) {
-                                $targetColumnIndex['phone'] = $index; break;
-                            }
-                        }
-                        if (stripos($colName, "phone") !== false) $targetColumnIndex['phone'] = $index;
-                        if (stripos($colName, "specialisation") !== false) $targetColumnIndex['program'] = $index;
-                        if (stripos($colName, "password") !== false) $targetColumnIndex['password'] = $index;
-                        if (stripos($colName, "faculty") !== false) $targetColumnIndex['faculty'] = $index;
-                    }
+          $faculty_query = $pdo->prepare("SELECT faculty FROM internshipcoordinator WHERE email = :email");
+          $faculty_query->execute(['email' => $_SESSION['id']]);
+          $faculty = $faculty_query->fetchColumn();
 
-                    // Check if all required columns are found
-                    $missingColumns = array_keys(array_filter($targetColumnIndex, fn($v) => $v === -1));
-                    if (!empty($missingColumns)) {
-                        $error_message = "❌ Missing required columns: " . implode(", ", $missingColumns) . ". Please check the CSV file format!";
-                    } else {
-                        // Read CSV data and insert into the database
-                        while (($data = fgetcsv($fileload, 0, ",")) !== false) {
-                            if (!isset($data[$targetColumnIndex['name']], $data[$targetColumnIndex['studentid']],
-                                      $data[$targetColumnIndex['email']], $data[$targetColumnIndex['phone']],
-                                      $data[$targetColumnIndex['program']], $data[$targetColumnIndex['faculty']],
-                                      $data[$targetColumnIndex['password']])) {
-                                continue; // Skip incorrectly formatted rows
-                            }
+          $check_is = $pdo->prepare("SELECT email FROM industrysupervisor WHERE email = :email");
+          $check_is->execute([':email' => $industry_supervisor_email]);
+          $existing_is_email = $check_is->fetchColumn();
 
-                            $name = $data[$targetColumnIndex['name']];
-                            $id = $data[$targetColumnIndex['studentid']];
-                            $email = $data[$targetColumnIndex['email']];
-                            $phone = $data[$targetColumnIndex['phone']];
-                            $program = $data[$targetColumnIndex['program']];
-                            $facultyq = $data[$targetColumnIndex['faculty']];
-                            $ps = $data[$targetColumnIndex['password']];
-
-                            // Query faculty table to ensure facultyq exists
-                            $facultyCheck = $pdo->prepare("SELECT faculty_name FROM faculty WHERE faculty_name = :faculty");
-                            $facultyCheck->execute([':faculty' => $facultyq]);
-                            if (!$facultyCheck->fetch()) {
-                                $error_message = "Error: The selected Faculty ($facultyq) does not exist in the database. Please check the CSV file or database records!";
-                                break; // Stop processing
-                            }
-
-                            // Insert into database
-                            $sql = "INSERT INTO student (student_id, name, email, phone_number, program_name, password, faculty) 
-                                    VALUES (:stdid, :name, :email, :phone, :program, :password, :faculty)";
-                            $mydb = $pdo->prepare($sql);
-                            $mydb->execute([
-                                ':stdid' => $id, ':name' => $name, ':email' => $email, 
-                                ':phone' => $phone, ':program' => $program, 
-                                ':password' => $ps, ':faculty' => $facultyq
-                            ]);
-                        }
-                        fclose($fileload);
-                        header("Location: IntCoCreateStd.php");
-                        exit();
-                    }
-                } else {
-                    $error_message = "Unable to read CSV file.";
-                }
-            } else {
-                $error_message = "Error uploading file.";
-            }
-        } else {
-            $error_message = "This file type is not allowed.";
+          $_SESSION['csv_data'][] = [
+            'student_id' => $student_id,
+            'name' => $name,
+            'email' => $email,
+            'phone_number' => $phone_number,
+            'program_name' => $program_name,
+            'faculty' => $faculty,
+            'password' => $password,
+            'company_supervisor_name' => $company_supervisor_name,
+            'industry_supervisor_email' => $industry_supervisor_email,
+            'company_name' => $company_name,
+            'existing_is_email' => $existing_is_email
+          ];
         }
-    }
-}
- 
- 
 
-if(isset($_POST["discard"])){
-    $delete ="DELETE FROM student WHERE name LIKE 'Student%' ";
-    $statement = $pdo->prepare($delete);
-    $statement->execute();
-    echo "<script>window.location.href='IntCoCreateStd.php';</script>";
-    exit();
+        fclose($fileload);
+      } else {
+        $error_message = "Unable to read CSV file.";
+      }
+    }
+  }
 }
+
+if (isset($_POST['confirm_submit']) && !empty($_SESSION['csv_data'])) {
+  foreach ($_SESSION['csv_data'] as $row) {
+    $hashed_password = password_hash($row['password'], PASSWORD_DEFAULT);
+
+    $insert_student = $pdo->prepare("INSERT INTO student (student_id, name, email, password, phone_number, program_name, faculty, completed_tasks, email_reminders) 
+                                         VALUES (:student_id, :name, :email, :password, :phone_number, :program_name, :faculty, 0, 7)");
+    $insert_student->execute([
+      ':student_id' => $row['student_id'],
+      ':name' => $row['name'],
+      ':email' => $row['email'],
+      ':password' => $hashed_password,
+      ':phone_number' => $row['phone_number'],
+      ':program_name' => $row['program_name'],
+      ':faculty' => $row['faculty']
+    ]);
+
+    if (!$row['existing_is_email']) {
+      $insert_is = $pdo->prepare("INSERT INTO industrysupervisor (email, name, password, company_name, completed_tasks, email_reminders)
+                                        VALUES (:email, :name, :password, :company_name, 0, 7)");
+      $insert_is->execute([
+        ':email' => $row['industry_supervisor_email'],
+        ':name' => $row['company_supervisor_name'],
+        ':password' => $hashed_password,
+        ':company_name' => $row['company_name']
+      ]);
+    }
+
+    $insert_offer = $pdo->prepare("INSERT INTO internshipoffer (offer_id, student_id, is_email, as_email)
+                                       VALUES (:offer_id, :student_id, :is_email, NULL)");
+    $insert_offer->execute([
+      ':offer_id' => "int_" . $row['student_id'],
+      ':student_id' => $row['student_id'],
+      ':is_email' => $row['industry_supervisor_email']
+    ]);
+  }
+
+  unset($_SESSION['csv_data']);
+  header("Location: IntCoCreateStd.php?success=true");
+  exit();
+}
+
+if (isset($_POST['discard'])) {
+  unset($_SESSION['csv_data']); // Clear the preview session
+  header("Location: IntCoCreateStd.php"); // Reload page
+  exit();
+}
+
 ?>
 
-
 <!DOCTYPE html>
+
 <head>
-    <meta charset="UTF-8">
-    <title>Create - Student</title>
-    <link rel="stylesheet" href="IntCoHeader.css">
-    <link rel="stylesheet" href="IntCoCreateStd.css">
-    <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
-    <style>
-        .alert{
-    padding: 10px;
-    background-color: #f8d7da;
-    border: 1px solid #f5c2c7;
-    color: #842029;
-    border-radius: 4px;
-    margin-bottom: 20px;}
-    </style>
-</head>
-<body>
-    <!-- navigationbar -->
-    <div class="header">
-        <div class="tint_logo">
-            <img class="logo" src="picture/logo.png">
-            <p class="tint_title">t-int</p>
-        </div>
-        <div class="navigationbar">
-            <div class="navigationbar_link">
-                <a href="IntCoHome.php">Home</a>
-            </div>
-        </div>
-        <div class="profile">
-        <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
-            <div class="profile_dropdown">
-                <a href="ICProfileSetting.php"><img class="settingicon" src="picture/setting.png">  Settings</a>
-                <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-                </div>
-        </div>
-    </div>
-   
-    <!-- form  -->
-    <form action="IntCoCreateStd.php" method="post" enctype="multipart/form-data" id="uploadForm">
-        <!-- error messages -->
-        <?php if (!empty($error_message)): ?>
-            <div class="alert">
-                <?php echo htmlspecialchars($error_message); ?>
-            </div>
-        <?php endif; ?>
-        <!-- Example CSV Format:-->
-
-        <h3>Example CSV Format:</h3>
-<table border="1" cellpadding="5" cellspacing="0">
-    <tr>
-        <th>Student Name</th>
-        <th>Student ID</th>
-        <th>Email</th>
-        <th>Phone Number</th>
-        <th>Program</th>
-        <th>Password</th>
-        <th>Faculty</th>
-    </tr>
-    <tr>
-        <td>John Doe</td>
-        <td>123456</td>
-        <td>johndoe@example.com</td>
-        <td>0123456789</td>
-        <td>Computer Science</td>
-        <td>password123</td>
-        <td>School of Computer Science (SCS)</td>
-    </tr>
-</table>
-
-        <div class="button">
-            <h2 class="CreateAS">Create - Student</h2>
-            <div class="mybutton">
-                <input type="file" id="uploadfile" name="fileToUpload" style="display:none" onchange="displayFileName()">
-                <button type="button" class="importbutton" onclick="document.getElementById('uploadfile').click();">Import</button>
-                <span id="selectedFileName"></span>
-            </div>
-        </div>
-
-        <!-- StudentContactsTables -->
-        <div>
-            <table class="StudentContactsTable">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone No.</th>
-                        <th>Program Name</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- row1 -->
-                    <?php foreach($result as $line){ ?>
-                    <tr>
-                        <td><?= htmlspecialchars($line['name']); ?></td>
-                        <td><a href="mailto:<?= htmlspecialchars($line['email']); ?>"><?= htmlspecialchars($line['email']); ?></a></td>
-                        <td><?= htmlspecialchars($line['phone_number']); ?></td>
-                        <td><?= htmlspecialchars($line['program_name']); ?></td> 
-                    </tr>
-                    <?php } ?>
-                </tbody>
-            </table>
-
-            <div class="button_bottom">
-                <button type="submit" class="discard" name="discard">Discard</button>
-                <input type="submit" name="upload" id="submit" value="Submit" class="submit">
-            </div>
-        </div>
-    </form>
-
-    <script>
-    function displayFileName() {
-        let fileInput = document.getElementById("uploadfile");  
-        if(fileInput.files.length > 0) {
-            let filename = fileInput.files[0].name;
-            document.getElementById("selectedFileName").textContent = "Selected File : " + filename;
-        }
+  <meta charset="UTF-8">
+  <title>Create</title>
+  <link rel="stylesheet" href="IntCoHeader.css">
+  <link rel="stylesheet" href="IntCoCreateStd.css">
+  <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    .alert {
+      padding: 10px;
+      background-color: #f8d7da;
+      border: 1px solid #f5c2c7;
+      color: #842029;
+      border-radius: 4px;
+      margin-bottom: 20px;
     }
-    </script>
+  </style>
+</head>
+
+<body>
+  <!-- navigationbar -->
+  <div class="header">
+    <div class="tint_logo">
+      <img class="logo" src="picture/logo.png">
+      <p class="tint_title">t-int</p>
+    </div>
+    <div class="navigationbar">
+      <div class="navigationbar_link">
+        <a href="IntCoHome.php">Home</a>
+      </div>
+    </div>
+    <div class="profile">
+      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
+      <div class="profile_dropdown">
+        <a href="ICProfileSetting.php"><img class="settingicon" src="picture/setting.png"> Settings</a>
+        <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
+      </div>
+    </div>
+  </div>
+
+  <form method="post" enctype="multipart/form-data">
+    <div class="button">
+      <h2 class="CreateAS">Create</h2>
+      <div class="mybutton">
+        <label for="fileToUpload">Select a CSV file:</label>
+        <input type="file" name="fileToUpload" accept=".csv" required>
+        <button class="importbutton" type="submit" name="upload">Upload & Preview</button>
+      </div>
+    </div>
+  </form>
+
+  <?php if (!empty($_SESSION['csv_data'])): ?>
+    <h3 class="CreateAS" style="padding-left: 20px;">Preview of Student Records to be Created</h3>
+    <form method="post">
+      <table border="1" class="StudentContactsTable">
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone Number</th>
+            <th>Program Name</th>
+            <th>Faculty</th>
+            <th>Company Supervisor</th>
+            <th>Industry Supervisor Email</th>
+            <th>Company</th>
+            <th>Industry Supervisor Exists</th>
+          </tr>
+        </thead>
+        <tbody>
+          <?php foreach ($_SESSION['csv_data'] as $row): ?>
+            <tr>
+              <td><?= htmlspecialchars($row['student_id']) ?></td>
+              <td><?= htmlspecialchars($row['name']) ?></td>
+              <td><?= htmlspecialchars($row['email']) ?></td>
+              <td><?= htmlspecialchars($row['phone_number']) ?></td>
+              <td><?= htmlspecialchars($row['program_name']) ?></td>
+              <td><?= htmlspecialchars($row['faculty']) ?></td>
+              <td><?= htmlspecialchars($row['company_supervisor_name']) ?></td>
+              <td><?= htmlspecialchars($row['industry_supervisor_email']) ?></td>
+              <td><?= htmlspecialchars($row['company_name']) ?></td>
+              <td><?= $row['existing_is_email'] ? "Yes" : "No" ?></td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+      <br>
+      <div class="button_buttom" style="text-align: right;">
+      <button type="submit" class="discard" name="discard">Discard</button>
+      <button type="submit" class="submit" name="confirm_submit">Confirm & Submit</button>
+      </div>
+    </form>
+  <?php endif; ?>
+
 </body>
+
 </html>

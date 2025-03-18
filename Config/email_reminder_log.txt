@@ -1,0 +1,7 @@
+[2025-03-18 19:05:42] No email reminders enabled for specificuser@example.com.
+[2025-03-18 19:06:07] Task: Complete and Submit Reflective Journal | Due Date: 2025-04-04 | Days Until Due: 16
+[2025-03-18 19:06:07] Task: Complete and Submit Industrial Training Report | Due Date: 2025-04-25 | Days Until Due: 37
+[2025-03-18 19:06:07] Task: Complete and Submit Weekly Logbook | Due Date: 2025-03-28 | Days Until Due: 9
+[2025-03-18 19:06:07] Task: Complete and Submit Industrial Training Visit Form | Due Date: 2025-03-06 | Days Until Due: 12
+[2025-03-18 19:06:07] Task: Complete and Submit Evaluation Form | Due Date: 2025-03-27 | Days Until Due: 8
+[2025-03-18 19:06:10] Reminder email sent successfully to 0363762@sd.taylors.edu.my.
