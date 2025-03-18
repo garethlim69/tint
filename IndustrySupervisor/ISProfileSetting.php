@@ -6,47 +6,13 @@ require '../Config/db.php'; // Include database connection
 $userEmail = $_SESSION['id'];
 
 // Fetch user details from the database
-$query = "SELECT name, email, company_name, phone_number FROM industrysupervisor WHERE email = :email";
+$query = "SELECT name, email, company_name FROM industrysupervisor WHERE email = :email";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':email', $userEmail);
 $stmt->execute();
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-if (!$user) {
-  die("User not found.");
-}
-if ($_SERVER["REQUEST_METHOD"] === "POST") {
-  $newPhone = $_POST["phone_no"];
 
-  // Check if phone number is unique
-  $checkQuery = "SELECT COUNT(*) FROM industrysupervisor WHERE phone_number = :phone_no AND email != :email";
-  $checkStmt = $pdo->prepare($checkQuery);
-  $checkStmt->bindParam(':phone_no', $newPhone);
-  $checkStmt->bindParam(':email', $userEmail);
-  $checkStmt->execute();
-  $count = $checkStmt->fetchColumn();
-
-  if ($count > 0) {
-      echo "<script>alert('Phone number already in use. Please use a different one.');</script>";
-  } else {
-      // Update phone number if unique
-      $updateQuery = "UPDATE industrysupervisor SET phone_number = :phone_no WHERE email = :email";
-      $updateStmt = $pdo->prepare($updateQuery);
-      $updateStmt->bindParam(':phone_no', $newPhone);
-      $updateStmt->bindParam(':email', $userEmail);
-      
-      if ($updateStmt->execute()) {
-          //Redirect to the same page to prevent form resubmission
-          header("Location: ISProfileSetting.php?success=1");
-          exit();
-      } else {
-          echo "<script>alert('Error updating phone number.');</script>";
-      }
-  }
-}
-if (isset($_GET['success'])) {
-  echo "<script>alert('Phone number updated successfully!');</script>";
-}
 ?>
 <!DOCTYPE html>
 <html>
@@ -144,11 +110,6 @@ if (isset($_GET['success'])) {
               <label for="company_name">Company Name</label>
               <input type="text" id="company_name" value="<?php echo htmlspecialchars($user['company_name']); ?>" readonly>
 
-              <label for="phone_no">Phone Number</label>
-              <input type="tel" id="phone_no" name="phone_no" value="<?php echo htmlspecialchars($user['phone_number']); ?>"
-       pattern="[0-9]{10,11}" title="Please enter a valid phone number (10-11 digits)" required>
-
-              <button type="submit" class="submit-btn">Submit</button>
             </div>
           </form>
         </div>
