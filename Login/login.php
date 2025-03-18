@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email']) && isset($_PO
 
                     $_SESSION['id'] = ($role === 'student') ? substr($email, 0, 7) : $email;
 
-                    if ($email === "0363762@sd.taylors.edu.my") {
+                    if ($email === "0363762@sd.taylors.edu.my") { //CHANGE THIS TO REAL EMAIL ADDRESS
                         $otp = rand(100000, 999999);
                         $expiresAt = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 
