@@ -28,6 +28,7 @@ $taskDueDate = isset($nextTask['due_date']) ? date("d/m/Y", strtotime($nextTask[
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Home</title>
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
   <link rel="stylesheet" href="StudentHeader.css">
   <link rel="stylesheet" href="StudentHome.css">
   <link href="https://fonts.googleapis.com/css2?family=Livvic:wght@400;600&display=swap" rel="stylesheet">
@@ -91,17 +92,16 @@ $taskDueDate = isset($nextTask['due_date']) ? date("d/m/Y", strtotime($nextTask[
     language-code="en">
   </df-messenger>
   <script>
-    function toggleChatbot() {
-      let chat = document.querySelector('df-messenger').shadowRoot.querySelector('.df-messenger-wrapper');
+      function toggleChatbot() {
+    let chat = document.querySelector('df-messenger').shadowRoot.querySelector('.df-messenger-wrapper');
 
-      if (chat.hasAttribute('hidden')) {
-        chat.removeAttribute('hidden'); 
-      } else {
+    if (chat.hasAttribute('hidden')) {
+        chat.removeAttribute('hidden');
+    } else {
         chat.setAttribute('hidden', 'true');
-      }
     }
+}
   </script>
-
 </body>
 
 </html>
