@@ -72,3 +72,27 @@ body {
   color: black;
   right: 50px;
 }
+
+.chat-button {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 60px;
+  height: 60px;
+  cursor: pointer;
+  z-index: 9999;
+}
+
+df-messenger {
+  --df-messenger-button-titlebar-color: red;
+  --df-messenger-button-titlebar-font-color: white;
+  --df-messenger-chat-background-color: #f8f9fa;
+  --df-messenger-font-color: black;
+  --df-messenger-input-placeholder-font-color: gray;
+  --df-messenger-input-font-color: black;
+  --df-messenger-send-icon: red;
+}
+
+df-messenger .df-messenger-wrapper {
+  display: none;
+}
