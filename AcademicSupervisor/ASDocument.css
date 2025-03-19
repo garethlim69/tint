@@ -1,5 +1,5 @@
 body {
-  font-family: 'Livvic';
+  font-family: "Livvic";
   margin: 0;
   background-color: #fff;
   font-size: 17px;
@@ -8,7 +8,7 @@ h2 {
   font-size: 22px;
   color: rgb(83, 66, 66);
   margin-left: 65px;
-  margin-top:50px ;
+  margin-top: 50px;
   font-weight: normal;
 }
 
@@ -26,14 +26,15 @@ table {
   border-spacing: 60px; /* Absolute spacing between cells */
   text-align: left;
 }
-.alignleft{
+.alignleft {
   text-align: left;
 }
-th, td {
+th,
+td {
   padding: 10px;
   padding-right: 100px;
   padding-left: 85px;
-  text-align:center;
+  text-align: center;
 }
 
 th {
@@ -67,14 +68,18 @@ td i {
 label {
   margin-right: 8px;
 }
-.download-btn, .download-template-btn, .edit-btn{
+.download-btn,
+.download-template-btn,
+.edit-btn {
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
 }
 
-.download-btn img, .download-template-btn img, .edit-btn img {
+.download-btn img,
+.download-template-btn img,
+.edit-btn img {
   width: 35px;
   height: 35px;
   display: block;

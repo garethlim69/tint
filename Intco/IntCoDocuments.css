@@ -4,6 +4,7 @@ body {
   background-color: #fff;
   font-size: 17px;
 }
+
 h2 {
   font-size: 22px;
   color: rgb(83, 66, 66);
@@ -13,7 +14,7 @@ h2 {
 }
 
 .table-container {
-  margin-top: 0px; /* Prevents overlap with fixed header */
+  margin-top: 0px;
   padding-top: 0px;
   display: flex;
   justify-content: center;
@@ -23,12 +24,14 @@ h2 {
 
 table {
   border-collapse: separate;
-  border-spacing: 60px; /* Absolute spacing between cells */
+  border-spacing: 60px;
   text-align: left;
 }
+
 .alignleft {
   text-align: left;
 }
+
 th,
 td {
   padding: 10px;

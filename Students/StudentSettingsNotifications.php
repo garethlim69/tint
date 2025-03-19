@@ -1,20 +1,18 @@
 <?php
-require '../Config/db.php'; // Ensure database connection
+require '../Config/db.php';
 require '../Config/profpic.php';
 $studentID = $_SESSION['id'];
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $taskReminder = isset($_POST["taskReminder"]) && $_POST["taskReminder"] === "true" ? 1 : 0;
-  $reminderDays = isset($_POST["reminderDays"]) ? (int)$_POST["reminderDays"] : 0;
+  $reminderDays = isset($_POST["reminderDays"]) ? (int) $_POST["reminderDays"] : 0;
 
-  // Ensure valid range (0 to 14)
   if ($reminderDays < 0 || $reminderDays > 14) {
     echo "Invalid reminder days value.";
     exit();
   }
 
-  // Update user settings
   $query = "UPDATE student SET email_reminders = :reminderDays WHERE student_id = :studentID";
   $stmt = $pdo->prepare($query);
   $stmt->bindParam(':reminderDays', $reminderDays);
@@ -28,16 +26,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   exit();
 }
 
-// Fetch user's current email_reminders setting
 $query = "SELECT email_reminders FROM student WHERE student_id = :studentID";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':studentID', $studentID);
 $stmt->execute();
 $emailReminderDays = $stmt->fetchColumn();
 
-// Determine toggle state (OFF if 0, ON if >0)
 $reminderEnabled = ($emailReminderDays > 0) ? "checked" : "";
-$selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default to 1 day if OFF
+$selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1";
 
 ?>
 <!DOCTYPE html>
@@ -53,12 +49,9 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
 </head>
 
 <body>
-
-  <!-- navigationbar -->
   <div class="header">
     <div class="tint_logo">
-      <img class="logo"
-        src="picture/logo.png">
+      <img class="logo" src="picture/logo.png">
       <p class="tint_title">
         t-int
       </p>
@@ -84,16 +77,16 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
       </div>
     </div>
     <div class="profile">
-    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
-    <div class="profile_dropdown">
-        <a href="StudentSettingsProfile.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>"
+        style="border-radius: 50%;">
+      <div class="profile_dropdown">
+        <a href="StudentSettingsProfile.php"> <img class="settingicon" src="picture/setting.png"> Settings</a>
         <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
       </div>
     </div>
   </div>
 
   <div class="settings-container">
-    <!-- Sidebar -->
     <div class="sidebar">
       <h2>Settings</h2>
       <ul>
@@ -102,11 +95,9 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
         <li onclick="window.location.href='StudentSettingsSecurity.php'">Security</li>
       </ul>
     </div>
-    <!-- Main Content -->
     <div class="settings-content">
       <div class="profile-section">
         <h2>Email Notifications</h2>
-        <!-- Task Due Date Reminder Toggle -->
         <div class="notification-setting">
           <label for="taskReminderToggle">Task Due Date Reminder</label>
           <label class="switch">
@@ -114,8 +105,6 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
             <span class="slider round"></span>
           </label>
         </div>
-
-        <!-- Hidden Subfield for Days in Advance -->
         <div id="reminderDaysContainer" style="display: <?php echo ($emailReminderDays > 0) ? 'block' : 'none'; ?>;">
           <label for="reminderDays">Days in advance to send email reminder:</label>
           <select id="reminderDays" name="reminderDays">
@@ -127,8 +116,6 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
             ?>
           </select>
         </div>
-
-        <!-- Save Button -->
         <button class="save-btn" onclick="saveNotificationSettings()">Save Settings</button>
       </div>
     </div>
@@ -138,7 +125,6 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
         const reminderDaysContainer = document.getElementById("reminderDaysContainer");
         const toggle = document.getElementById("taskReminderToggle");
 
-        // Show dropdown only when toggle is checked
         reminderDaysContainer.style.display = toggle.checked ? "block" : "none";
       }
 
@@ -147,12 +133,12 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
         const reminderDays = isReminderEnabled ? document.getElementById("reminderDays").value : 0;
 
         fetch("StudentSettingsNotifications.php", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: `taskReminder=${isReminderEnabled}&reminderDays=${reminderDays}`
-          })
+          method: "POST",
+          headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+          },
+          body: `taskReminder=${isReminderEnabled}&reminderDays=${reminderDays}`
+        })
           .then(response => response.text())
           .then(data => alert("Settings updated successfully!"))
           .catch(error => alert("Error updating settings"));

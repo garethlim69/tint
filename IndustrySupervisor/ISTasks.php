@@ -6,7 +6,7 @@ $supervisorEmail = $_SESSION['id'];
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"]) && isset($_POST["completed_tasks"])) {
     $supervisorEmail = $_POST["email"];
     $completedTasks = intval($_POST["completed_tasks"]);
-    $action = $_POST["action"]; // "increase" or "decrease"
+    $action = $_POST["action"];
 
     if (!empty($supervisorEmail)) {
         if ($action === "increase") {
@@ -23,15 +23,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["email"]) && isset($_P
     }
     exit;
 }
-
-// Fetch completed tasks count from industrysupervisor table
-$stmt = $pdo->prepare("SELECT completed_tasks FROM industrysupervisor WHERE email = ?");
+ $stmt = $pdo->prepare("SELECT completed_tasks FROM industrysupervisor WHERE email = ?");
 $stmt->execute([$supervisorEmail]);
 $supervisorData = $stmt->fetch(PDO::FETCH_ASSOC);
 $completedTasks = $supervisorData['completed_tasks'] ?? 0;
-
-// Fetch all tasks
-$stmt = $pdo->query("SELECT task_name, due_date FROM istasks ORDER BY due_date ASC");
+ $stmt = $pdo->query("SELECT task_name, due_date FROM istasks ORDER BY due_date ASC");
 $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

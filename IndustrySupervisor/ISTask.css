@@ -1,6 +1,5 @@
-/* General Styles */
 body {
-  font-family: 'Livvic';
+  font-family: "Livvic";
   margin: 0;
   background-color: #fff;
   font-size: 17px;
@@ -35,9 +34,17 @@ body {
   z-index: 1;
 }
 
-.green { background-color: rgb(10, 204, 10); }
-.yellow { background-color: yellow; }
-.red { background-color: red; }
+.green {
+  background-color: rgb(10, 204, 10);
+}
+
+.yellow {
+  background-color: yellow;
+}
+
+.red {
+  background-color: red;
+}
 
 .task-content {
   flex-grow: 1;
@@ -48,7 +55,6 @@ body {
   color: gray;
 }
 
-/* Custom radio button */
 input[type="radio"] {
   appearance: none;
   width: 16px;
@@ -72,17 +78,16 @@ input[type="radio"].forced-checked::before {
   transform: translate(-50%, -50%);
 }
 
-/* Disable completed tasks radio buttons */
 input[type="radio"]:disabled {
   cursor: not-allowed;
   opacity: 0.3;
 }
 
-/* Simulate checked state for disabled radio buttons */
 input[type="radio"]:disabled.forced-checked {
   background-color: transparent;
   border: 1px solid black;
 }
+
 .title-container {
   display: flex;
   justify-content: space-between;
@@ -96,13 +101,15 @@ input[type="radio"]:disabled.forced-checked {
   margin: 0;
   padding-left: 15px;
 }
+
 h2 {
   font-size: 22px;
   color: rgb(83, 66, 66);
   margin-left: 65px;
-  margin-top:50px ;
+  margin-top: 50px;
   font-weight: normal;
 }
+
 h3 {
   font-weight: normal;
 }

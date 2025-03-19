@@ -1,9 +1,8 @@
 <?php
-require '../Config/profpic.php'; 
+require '../Config/profpic.php';
 require '../Config/db.php';
 $userEmail =  $_SESSION['id'];
 
-// Fetch user details from the database
 $query = "SELECT name, email, faculty, phone_number FROM academicsupervisor WHERE email = :email";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':email', $userEmail);
@@ -16,7 +15,6 @@ if (!$user) {
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $newPhone = $_POST["phone_no"];
 
-  // Check if phone number is unique
   $checkQuery = "SELECT COUNT(*) FROM academicsupervisor WHERE phone_number = :phone_no AND email != :email";
   $checkStmt = $pdo->prepare($checkQuery);
   $checkStmt->bindParam(':phone_no', $newPhone);
@@ -25,21 +23,19 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $count = $checkStmt->fetchColumn();
 
   if ($count > 0) {
-      echo "<script>alert('Phone number already in use. Please use a different one.');</script>";
+    echo "<script>alert('Phone number already in use. Please use a different one.');</script>";
   } else {
-      // Update phone number if unique
-      $updateQuery = "UPDATE academicsupervisor SET phone_number = :phone_no WHERE email = :email";
-      $updateStmt = $pdo->prepare($updateQuery);
-      $updateStmt->bindParam(':phone_no', $newPhone);
-      $updateStmt->bindParam(':email', $userEmail);
-      
-      if ($updateStmt->execute()) {
-          //Redirect to the same page to prevent form resubmission
-          header("Location: ASProfileSetting.php?success=1");
-          exit();
-      } else {
-          echo "<script>alert('Error updating phone number.');</script>";
-      }
+    $updateQuery = "UPDATE academicsupervisor SET phone_number = :phone_no WHERE email = :email";
+    $updateStmt = $pdo->prepare($updateQuery);
+    $updateStmt->bindParam(':phone_no', $newPhone);
+    $updateStmt->bindParam(':email', $userEmail);
+
+    if ($updateStmt->execute()) {
+      header("Location: ASProfileSetting.php?success=1");
+      exit();
+    } else {
+      echo "<script>alert('Error updating phone number.');</script>";
+    }
   }
 }
 if (isset($_GET['success'])) {
@@ -99,26 +95,22 @@ if (isset($_GET['success'])) {
         <img class="profile_icon" id="profile-picture"
           src="picture/profile.png" style="border-radius: 50%;">
         <div class="profile_dropdown">
-          <a href="ASProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+          <a href="ASProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Settings</a>
           <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-          </div>
+        </div>
       </div>
 
 
     </div>
     <div class="settings-container">
-      <!-- Sidebar -->
       <div class="sidebar">
         <h2>Settings</h2>
         <ul>
-    <li class="active">Profile</li>
-    <li onclick="window.location.href='ASSettingsNotifications.php'">Notifications</li>
-    <li onclick="window.location.href='ASSettingsSecurity.php'">Security</li>
-</ul>
-
+          <li class="active">Profile</li>
+          <li onclick="window.location.href='ASSettingsNotifications.php'">Notifications</li>
+          <li onclick="window.location.href='ASSettingsSecurity.php'">Security</li>
+        </ul>
       </div>
-
-      <!-- Main Content -->
       <div class="settings-content">
 
         <div class="profile-section">
@@ -144,7 +136,7 @@ if (isset($_GET['success'])) {
 
               <label for="phone_no">Phone Number</label>
               <input type="tel" id="phone_no" name="phone_no" value="<?php echo htmlspecialchars($user['phone_number']); ?>"
-       pattern="[0-9]{10,11}" title="Please enter a valid phone number (10-11 digits)" required>
+                pattern="[0-9]{10,11}" title="Please enter a valid phone number (10-11 digits)" required>
 
               <button type="submit" class="submit-btn">Submit</button>
             </div>
@@ -156,14 +148,14 @@ if (isset($_GET['success'])) {
   </div>
   <script>
     const userEmail = "<?php echo $userEmail; ?>";
-    const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co"; // Replace with your actual Supabase URL
-    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM"; // Replace with your actual Supabase Anon Key
+    const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM";
 
     const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     async function uploadProfilePicture() {
       const fileInput = document.getElementById("profile-upload");
-      const file = fileInput.files[0]; // Get selected file
+      const file = fileInput.files[0];
 
       if (!file) {
         alert("Please select an image to upload.");
@@ -175,16 +167,15 @@ if (isset($_GET['success'])) {
         return;
       }
 
-      const filePath = `${userEmail}.png`; // Use session email
+      const filePath = `${userEmail}.png`;
 
-      // Upload file to Supabase Storage
       const {
         data,
         error
       } = await supabase.storage
         .from("profile-pictures")
         .upload(filePath, file, {
-          upsert: true, // Overwrite existing file if exists
+          upsert: true,
           contentType: file.type
         });
 
@@ -194,16 +185,14 @@ if (isset($_GET['success'])) {
         return;
       }
 
-      // Get public URL for the uploaded image
       const {
         data: urlData
       } = supabase.storage
         .from("profile-pictures")
         .getPublicUrl(filePath);
 
-      // Update profile picture preview
       document.querySelectorAll("#profile-picture").forEach(img => {
-        img.src = urlData.publicUrl; // Set to default profile picture
+        img.src = urlData.publicUrl;
       });
 
       alert("Profile picture uploaded successfully!");
@@ -215,9 +204,8 @@ if (isset($_GET['success'])) {
       const confirmDelete = confirm("Are you sure you want to remove your profile picture?");
       if (!confirmDelete) return;
 
-      const filePath = `${userEmail}.png`; // Profile picture path in Supabase
+      const filePath = `${userEmail}.png`;
 
-      // Delete the profile picture from Supabase Storage
       const {
         error
       } = await supabase.storage
@@ -230,18 +218,16 @@ if (isset($_GET['success'])) {
         return;
       }
 
-      //Reset profile picture to default across the UI
       document.querySelectorAll("#profile-picture").forEach(img => {
-        img.src = "picture/profile.png"; // Set to default profile picture
+        img.src = "picture/profile.png";
       });
 
       alert("Profile picture removed successfully!");
     }
 
     async function loadProfilePicture() {
-      const filePath = `${userEmail}.png`; // Path to user's profile picture
+      const filePath = `${userEmail}.png`;
 
-      // Get the public URL from Supabase Storage
       const {
         data
       } = supabase.storage.from("profile-pictures").getPublicUrl(filePath);
@@ -250,10 +236,10 @@ if (isset($_GET['success'])) {
         try {
           const response = await fetch(data.publicUrl, {
             method: "HEAD"
-          }); // Only check if it exists
+          });
           if (response.ok) {
             document.querySelectorAll("#profile-picture").forEach(img => {
-              img.src = data.publicUrl; // Set profile picture
+              img.src = data.publicUrl;
             });
             return;
           }
@@ -262,7 +248,6 @@ if (isset($_GET['success'])) {
         }
       }
 
-      //If the image does not exist, set all profile pictures to default
       document.querySelectorAll("#profile-picture").forEach(img => {
         img.src = "picture/profile.png";
       });

@@ -1,20 +1,16 @@
 <?php
 require '../Config/profpic.php';
-require '../Config/db.php'; // Ensure database connection
+require '../Config/db.php';
 $userEmail = $_SESSION['id'];
 
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
   $taskReminder = isset($_POST["taskReminder"]) && $_POST["taskReminder"] === "true" ? 1 : 0;
   $reminderDays = isset($_POST["reminderDays"]) ? (int)$_POST["reminderDays"] : 0;
-
-  // Ensure valid range (0 to 14)
   if ($reminderDays < 0 || $reminderDays > 14) {
     echo "Invalid reminder days value.";
     exit();
   }
-
-  // Update user settings
   $query = "UPDATE industrysupervisor SET email_reminders = :reminderDays WHERE email = :email";
   $stmt = $pdo->prepare($query);
   $stmt->bindParam(':reminderDays', $reminderDays);
@@ -27,17 +23,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
   }
   exit();
 }
-
-// Fetch user's current email_reminders setting
 $query = "SELECT email_reminders FROM industrysupervisor WHERE email = :email";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':email', $userEmail);
 $stmt->execute();
 $emailReminderDays = $stmt->fetchColumn();
-
-// Determine toggle state (OFF if 0, ON if >0)
 $reminderEnabled = ($emailReminderDays > 0) ? "checked" : "";
-$selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default to 1 day if OFF
+$selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1";
 
 ?>
 <!DOCTYPE html>
@@ -53,8 +45,6 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
 </head>
 
 <body>
-
-  <!-- navigationbar -->
   <div class="header">
     <div class="tint_logo">
       <img class="logo"
@@ -97,7 +87,6 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
     </div>
   </div>
   <div class="settings-container">
-    <!-- Sidebar -->
     <div class="sidebar">
       <h2>Settings</h2>
       <ul>
@@ -106,11 +95,9 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
         <li onclick="window.location.href='ISSettingsSecurity.php'">Security</li>
       </ul>
     </div>
-    <!-- Main Content -->
     <div class="settings-content">
       <div class="profile-section">
         <h2>Email Notifications</h2>
-        <!-- Task Due Date Reminder Toggle -->
         <div class="notification-setting">
           <label for="taskReminderToggle">Task Due Date Reminder</label>
           <label class="switch">
@@ -118,8 +105,6 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
             <span class="slider round"></span>
           </label>
         </div>
-
-        <!-- Hidden Subfield for Days in Advance -->
         <div id="reminderDaysContainer" style="display: <?php echo ($emailReminderDays > 0) ? 'block' : 'none'; ?>;">
           <label for="reminderDays">Days in advance to send email reminder:</label>
           <select id="reminderDays" name="reminderDays">
@@ -131,8 +116,6 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
             ?>
           </select>
         </div>
-
-        <!-- Save Button -->
         <button class="save-btn" onclick="saveNotificationSettings()">Save Settings</button>
       </div>
     </div>
@@ -141,8 +124,6 @@ $selectedDays = ($emailReminderDays > 0) ? $emailReminderDays : "1"; // Default 
       function toggleReminderSettings() {
         const reminderDaysContainer = document.getElementById("reminderDaysContainer");
         const toggle = document.getElementById("taskReminderToggle");
-
-        // Show dropdown only when toggle is checked
         reminderDaysContainer.style.display = toggle.checked ? "block" : "none";
       }
 

@@ -1,39 +1,32 @@
 body {
-  font-family: 'Livvic';
+  font-family: "Livvic";
   margin: 0;
   background-color: #fff;
   font-size: 17px;
 }
-.Contacts_IC{
-    font-size: 22px;
-    color: rgb(83, 66, 66);
-    margin-left: 65px;
-    margin-top:50px ;
-    font-weight: normal;
-
-}
-    
-.IContactsTable
-{
-    border-collapse: collapse;
-    margin: 50px;
-    width: 90%;
-    min-width: 200px;
+.Contacts_IC {
+  font-size: 22px;
+  color: rgb(83, 66, 66);
+  margin-left: 65px;
+  margin-top: 50px;
+  font-weight: normal;
 }
 
-.IContactsTable thead th
-{
-    background-color: lightgray;
-    text-align: left;
-    padding-left: 20px;
+.IContactsTable {
+  border-collapse: collapse;
+  margin: 50px;
+  width: 90%;
+  min-width: 200px;
 }
 
-.IContactsTable tbody td{
-   
-    padding: 7px ;
-    border-bottom: 1px solid lightgray;
-    padding-left: 19px;
-     
+.IContactsTable thead th {
+  background-color: lightgray;
+  text-align: left;
+  padding-left: 20px;
 }
 
-
+.IContactsTable tbody td {
+  padding: 7px;
+  border-bottom: 1px solid lightgray;
+  padding-left: 19px;
+}

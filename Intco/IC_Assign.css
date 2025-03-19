@@ -17,9 +17,11 @@ body {
   margin-bottom: 10px;
   margin-top: 100px;
 }
+
 .title-row h2 {
   font-size: 24px;
 }
+
 .top-actions {
   display: flex;
   align-items: center;
@@ -49,6 +51,7 @@ body {
   border-radius: 20px;
   margin-left: 120px;
 }
+
 .auto-assign-btn:hover,
 .add-student-btn:hover {
   background-color: #e62e2e;
@@ -57,22 +60,26 @@ body {
 table.outer-table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 30px; 
+  margin-bottom: 30px;
   background-color: rgb(207, 205, 205);
 }
+
 .outer-table thead tr {
   border-bottom: 1px solid rgb(42, 42, 42);
 }
+
 .outer-table thead th {
   text-align: left;
   text-decoration: underline;
   font-weight: normal;
   padding-bottom: 8px;
 }
+
 .outer-table th,
 .outer-table td {
   padding: 12px;
 }
+
 .outer-table tbody tr:not(:last-child) {
   border-bottom: 1px solid #ddd;
 }
@@ -81,6 +88,7 @@ a.email-link {
   color: #333;
   text-decoration: none;
 }
+
 a.email-link:hover {
   text-decoration: underline;
 }
@@ -88,6 +96,7 @@ a.email-link:hover {
 .sub-row {
   display: none;
 }
+
 .sub-row td {
   padding: 0;
   background-color: #fafafa;
@@ -97,17 +106,20 @@ table.inner-table {
   width: 100%;
   border-collapse: collapse;
 }
+
 .inner-table thead th {
   background-color: #f2f2f2;
   text-decoration: underline;
   padding: 8px;
   font-weight: normal;
 }
+
 .inner-table th,
 .inner-table td {
   padding: 8px;
   font-size: 14px;
 }
+
 .inner-table tbody tr:not(:last-child) {
   border-bottom: 1px solid #ddd;
 }
@@ -122,6 +134,7 @@ table.inner-table {
   gap: 10px;
   margin-right: 10px;
 }
+
 .discard-btn {
   background-color: #ccc;
   border: none;
@@ -130,6 +143,7 @@ table.inner-table {
   cursor: pointer;
   font-size: 14px;
 }
+
 .save-btn {
   background-color: #4caf50;
   color: #fff;
@@ -139,9 +153,11 @@ table.inner-table {
   cursor: pointer;
   font-size: 14px;
 }
+
 .discard-btn:hover {
   background-color: #b3b3b3;
 }
+
 .save-btn:hover {
   background-color: #45a049;
 }
@@ -158,6 +174,7 @@ table.inner-table {
   justify-content: center;
   align-items: center;
 }
+
 .modal-content {
   background-color: #fff;
   width: 900px;
@@ -167,18 +184,22 @@ table.inner-table {
   display: flex;
   flex-direction: column;
 }
+
 .modal-header {
   background-color: #f2f2f2;
   padding: 15px 20px;
   border-bottom: 1px solid #ddd;
 }
+
 .modal-header h2 {
   font-size: 20px;
 }
+
 .modal-body {
   padding: 20px;
   flex: 1;
 }
+
 .modal-footer {
   display: flex;
   justify-content: flex-end;
@@ -187,6 +208,7 @@ table.inner-table {
   border-top: 1px solid #ddd;
   background-color: #f2f2f2;
 }
+
 .modal-footer button {
   padding: 8px 15px;
   border: none;
@@ -195,16 +217,20 @@ table.inner-table {
   font-size: 14px;
   margin-left: 10px;
 }
+
 .cancel-btn {
   background-color: #ccc;
 }
+
 .cancel-btn:hover {
   background-color: #b3b3b3;
 }
+
 .change-btn {
   background-color: #4caf50;
   color: #fff;
 }
+
 .change-btn:hover {
   background-color: #45a049;
 }
@@ -218,15 +244,18 @@ table.inner-table {
 .left-label {
   margin-right: 10px;
 }
+
 .search-row .left-label {
   display: flex;
   align-items: center;
   gap: 10px;
 }
+
 .search-row .left-label label {
   font-weight: bold;
   white-space: nowrap;
 }
+
 .search-row input[type="text"] {
   padding: 8px;
   border: 1px solid #ccc;
@@ -236,6 +265,7 @@ table.inner-table {
   border-radius: 20px;
   height: 8px;
 }
+
 .table-container2 {
   width: 100%;
   height: 300px;
@@ -256,10 +286,12 @@ table.inner-table {
   text-decoration: underline;
   font-weight: normal;
 }
+
 .student-table td {
   padding: 10px;
   border-bottom: 1px solid #ddd;
 }
+
 .student-table tr:last-child td {
   border-bottom: none;
 }

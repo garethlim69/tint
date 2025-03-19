@@ -31,7 +31,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email']) && isset($_PO
                         $otp = rand(100000, 999999);
                         $expiresAt = date('Y-m-d H:i:s', strtotime('+5 minutes'));
 
-                        // Store OTP in the database
                         $otpQuery = "INSERT INTO otp_codes (email, otp_code, expires_at) 
                                      VALUES (:email, :otp, :expires_at)
                                      ON CONFLICT (email) 
@@ -43,14 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['email']) && isset($_PO
                         $otpStmt->bindParam(':expires_at', $expiresAt);
                         $otpStmt->execute();
 
-                        // Send OTP via Email
                         $mail = new PHPMailer(true);
                         try {
                             $mail->isSMTP();
                             $mail->Host = 'smtp.gmail.com';
                             $mail->SMTPAuth = true;
                             $mail->Username = 'garethlimjs@gmail.com';
-                            $mail->Password = 'gktl jblg vkpl vnqi'; // Use App Password if 2FA is enabled
+                            $mail->Password = 'gktl jblg vkpl vnqi';
                             $mail->SMTPSecure = 'tls';
                             $mail->Port = 587;
 

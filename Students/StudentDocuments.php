@@ -1,10 +1,9 @@
 <?php
-// Supabase Credentials
 define("SUPABASE_URL", "https://rbborpwwkrfhkcqvacyz.supabase.co");
 define("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM");
 define("STORAGE_BUCKET", "documents");
 
-require '../Config/profpic.php'; 
+require '../Config/profpic.php';
 $student_id = $_SESSION['id'];
 $file_type = '.docx';
 ?>
@@ -45,10 +44,11 @@ $file_type = '.docx';
     </div>
 
     <div class="profile">
-    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
+      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>"
+        style="border-radius: 50%;">
       <div class="profile_dropdown">
         <a href="StudentSettingsProfile.php">
-          <img class="settingicon" src="picture/setting.png">  Settings</a>
+          <img class="settingicon" src="picture/setting.png"> Settings</a>
         <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
       </div>
     </div>
@@ -57,7 +57,7 @@ $file_type = '.docx';
   <div class="title" style="padding-right: 100pc; font-size: 21px;">
     <h2>Documents</h2>
   </div>
-
+  <p style="color: grey; text-align: right; padding-right: 20px; font-size: 15px;">(only .docx files accepted)</p>
   <div class="table-container">
     <table>
       <thead>
@@ -80,25 +80,22 @@ $file_type = '.docx';
         foreach ($documents as $index => $fileType) {
           $folder = in_array($fileType, ["Industrial Training Visit Form", "Evaluation Form", "Reflective Journal"]) ? "to fill" : "to mark";
           $fileName = "$folder/" . $student_id . "_" . $fileType . $file_type;
-        ?>
+          ?>
           <tr>
             <td class="alignleft"><?php echo $fileType; ?></td>
             <td>
-              <button class="download-template-btn"
-                data-file-type="<?php echo $fileType; ?>">
+              <button class="download-template-btn" data-file-type="<?php echo $fileType; ?>">
                 <img src="picture/download.png" alt="Download Template" width="35" height="35">
               </button>
             </td>
             <td>
-              <input type="file" id="fileInput<?php echo $index; ?>"
-                style="display: none;"
-                data-file-type="<?php echo $fileType; ?>"
-                data-folder="<?php echo $folder; ?>">
+              <input type="file" id="fileInput<?php echo $index; ?>" style="display: none;"
+                data-file-type="<?php echo $fileType; ?>" data-folder="<?php echo $folder; ?>">
               <label for="fileInput<?php echo $index; ?>">
                 <img src="picture/upload.png" alt="Upload" width="35" height="35" style="cursor: pointer;">
               </label>
             </td>
-            <td id="status<?php echo $index; ?>">Checking...</td> <!-- Moved submission status here -->
+            <td id="status<?php echo $index; ?>">Checking...</td>
           </tr>
         <?php } ?>
       </tbody>
@@ -106,7 +103,6 @@ $file_type = '.docx';
   </div>
 
   <script>
-    // Initialize Supabase Client
     const supabaseUrl = "<?php echo SUPABASE_URL; ?>";
     const supabaseAnonKey = "<?php echo SUPABASE_KEY; ?>";
     const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
@@ -114,11 +110,9 @@ $file_type = '.docx';
     const studentId = "<?php echo $student_id; ?>";
     const bucketName = "<?php echo STORAGE_BUCKET; ?>";
 
-    // Function to check file existence within a specific folder
     async function checkFileStatus(folder, fileName, statusId) {
       const filePath = `${folder}/${fileName}`;
 
-      // Fetch the list of files in the specific folder
       const {
         data,
         error
@@ -130,7 +124,6 @@ $file_type = '.docx';
         return;
       }
 
-      // Find the exact file
       const file = data.find(file => file.name === fileName);
 
       if (!file) {
@@ -138,36 +131,33 @@ $file_type = '.docx';
         return;
       }
 
-      // Get `updated_at` timestamp from the JSON response
       const lastUpdated = file.updated_at || "Unknown Time";
 
-      // Convert timestamp to readable format
       const formattedDate = lastUpdated !== "Unknown Time" ? new Date(lastUpdated).toLocaleString() : "Uploaded (Date Not Available)";
 
-      // Update the submission status in the table
       document.getElementById(statusId).innerText = `${formattedDate}`;
     }
 
     async function uploadFile(file, fileType, folder, statusId) {
       if (!file) return;
 
-      // Ensure folder is correctly passed
       if (!folder) {
         console.error("Upload failed: Folder is null or undefined!");
         alert("Upload failed: Folder is not set!");
         return;
       }
 
-      // Format the filename correctly
-      const fileExtension = file.name.split('.').pop();
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (fileExtension !== 'docx') {
+          alert("Only .docx files are allowed!");
+          return;
+        }
       const fileName = `${studentId}_${fileType}.${fileExtension}`;
 
-      // Construct the full path
       const filePath = `${folder}/${fileName}`;
 
-      console.log(`Uploading to: ${filePath}`); // Debugging log
+      console.log(`Uploading to: ${filePath}`);
 
-      // Upload file to Supabase
       const {
         data,
         error
@@ -181,15 +171,13 @@ $file_type = '.docx';
       } else {
         alert(`${fileType} successfully uploaded!`);
         console.log("Upload Successful:", data);
-        checkFileStatus(folder, fileName, statusId); // Refresh status after upload
+        checkFileStatus(folder, fileName, statusId);
       }
     }
 
-    // Function to download a document
     async function downloadFile(folder, fileName) {
       const filePath = `${folder}/${fileName}`;
 
-      // Get signed URL for the file
       const {
         data,
         error
@@ -202,7 +190,6 @@ $file_type = '.docx';
         return;
       }
 
-      // Trigger file download
       const link = document.createElement("a");
       link.href = data.signedUrl;
       link.download = fileName;
@@ -211,9 +198,8 @@ $file_type = '.docx';
       document.body.removeChild(link);
     }
 
-    // Attach event listeners to file inputs
     document.querySelectorAll('input[type="file"]').forEach((input, index) => {
-      input.addEventListener("change", function() {
+      input.addEventListener("change", function () {
         const file = this.files[0];
         const fileType = this.getAttribute("data-file-type");
         const folder = this.getAttribute("data-folder");
@@ -222,9 +208,8 @@ $file_type = '.docx';
       });
     });
 
-    // Attach event listeners to download buttons
     document.querySelectorAll('.download-btn').forEach((button, index) => {
-      button.addEventListener("click", function() {
+      button.addEventListener("click", function () {
         const fileType = this.getAttribute("data-file-type");
         const folder = "templates/"
         const fileName = `${studentId}_${fileType}<?php echo $file_type; ?>`;
@@ -232,41 +217,40 @@ $file_type = '.docx';
       });
     });
 
-    // Attach event listeners to template download buttons
     document.querySelectorAll('.download-template-btn').forEach((button, index) => {
-      button.addEventListener("click", function() {
+      button.addEventListener("click", function () {
         const fileType = this.getAttribute("data-file-type");
-        const fileName = `${fileType}<?php echo $file_type; ?>`; // Template file names don't have student IDs
+        const fileName = `${fileType}<?php echo $file_type; ?>`;
         downloadFile("templates", fileName);
       });
     });
 
     function checkAllFiles() {
       const filesToCheck = [{
-          folder: "to fill",
-          name: "<?php echo $student_id; ?>_Industrial Training Visit Form<?php echo $file_type; ?>",
-          id: "status0"
-        },
-        {
-          folder: "to fill",
-          name: "<?php echo $student_id; ?>_Evaluation Form<?php echo $file_type; ?>",
-          id: "status1"
-        },
-        {
-          folder: "to fill",
-          name: "<?php echo $student_id; ?>_Reflective Journal<?php echo $file_type; ?>",
-          id: "status2"
-        },
-        {
-          folder: "to mark",
-          name: "<?php echo $student_id; ?>_Weekly Logbook<?php echo $file_type; ?>",
-          id: "status3"
-        },
-        {
-          folder: "to mark",
-          name: "<?php echo $student_id; ?>_Industrial Training Report<?php echo $file_type; ?>",
-          id: "status4"
-        }
+        folder: "to fill",
+        name: "<?php echo $student_id; ?>_Industrial Training Visit Form<?php echo $file_type; ?>",
+        id: "status0"
+      },
+      {
+        folder: "to fill",
+        name: "<?php echo $student_id; ?>_Evaluation Form<?php echo $file_type; ?>",
+        id: "status1"
+      },
+      {
+        folder: "to fill",
+        name: "<?php echo $student_id; ?>_Reflective Journal<?php echo $file_type; ?>",
+        id: "status2"
+      },
+      {
+        folder: "to mark",
+        name: "<?php echo $student_id; ?>_Weekly Logbook<?php echo $file_type; ?>",
+        id: "status3"
+      },
+      {
+        folder: "to mark",
+        name: "<?php echo $student_id; ?>_Industrial Training Report<?php echo $file_type; ?>",
+        id: "status4"
+      }
       ];
 
       filesToCheck.forEach(file => {
@@ -274,7 +258,6 @@ $file_type = '.docx';
       });
     }
 
-    // Run check on page load
     window.onload = checkAllFiles;
   </script>
 </body>

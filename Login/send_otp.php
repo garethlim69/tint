@@ -1,7 +1,7 @@
 <?php
 session_start();
-require './composer/vendor/autoload.php'; // Include PHPMailer library
-require '../Config/db.php'; // Include PDO connection file
+require './composer/vendor/autoload.php';
+require '../Config/db.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -15,12 +15,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $otp = generateOTP();
     $expires_at = date("Y-m-d H:i:s", strtotime("+5 minutes"));
 
-    // Store OTP in database
     $stmt = $pdo->prepare("INSERT INTO otp_codes (email, otp_code, expires_at) VALUES (?, ?, ?) 
                            ON CONFLICT (email) DO UPDATE SET otp_code = EXCLUDED.otp_code, expires_at = EXCLUDED.expires_at");
     $stmt->execute([$email, $otp, $expires_at]);
 
-    // Send OTP via email
     $mail = new PHPMailer(true);
     try {
         $mail->isSMTP();

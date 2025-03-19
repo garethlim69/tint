@@ -3,7 +3,6 @@ require '../Config/db.php';
 require '../Config/profpic.php';
 $as_email = $_SESSION['id'];
 
-// Fetch students linked to the academic supervisor
 $stmt = $pdo->prepare("SELECT s.student_id, s.name FROM internshipoffer io 
                        JOIN student s ON io.student_id = s.student_id 
                        WHERE io.as_email = :as_email");
@@ -11,7 +10,6 @@ $stmt->bindParam(':as_email', $as_email, PDO::PARAM_STR);
 $stmt->execute();
 $students = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// Define documents at the start (fixes undefined variable issue)
 $documents = ["Evaluation Form", "Reflective Journal", "Weekly Logbook", "Industrial Training Report"];
 
 $selected_student = $_GET['student_id'] ?? null;
@@ -19,31 +17,26 @@ $student_marks = [];
 
 if ($selected_student) {
   foreach ($documents as $doc) {
-    // Check if marks exist for the student and document
     $stmt = $pdo->prepare("SELECT marks FROM student_marks WHERE student_id = :student_id AND document_name = :document_name");
     $stmt->execute(['student_id' => $selected_student, 'document_name' => $doc]);
     $marks = $stmt->fetchColumn();
 
     if ($marks === false) {
-      // No record found, insert new row with NULL marks
       $stmt = $pdo->prepare("INSERT INTO student_marks (student_id, document_name, marks) VALUES (:student_id, :document_name, NULL)");
       $stmt->execute(['student_id' => $selected_student, 'document_name' => $doc]);
       $marks = null;
     }
 
-    // Store results in an array
     $student_marks[$doc] = ($marks === null) ? "To Be Graded" : $marks;
   }
 }
 
-// Handle form submission for updating marks
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'], $_POST['document'])) {
-  ob_start(); // Prevent header issues
+  ob_start();
 
   $student_id = $_POST['student_id'];
-  $document_name = urldecode($_POST['document']); // Fix space encoding
+  $document_name = urldecode($_POST['document']);
 
-  // Fix: Ensure marks are properly handled
   $marks = isset($_POST['marks']) && $_POST['marks'] !== "" ? intval($_POST['marks']) : null;
 
   try {
@@ -61,28 +54,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'], $_POST['
     $stmt->bindParam(':document_name', $document_name, PDO::PARAM_STR);
     $stmt->execute();
 
-    // Debugging
-    $updated_row = $stmt->fetch(PDO::FETCH_ASSOC);
-    echo "<script>alert('Updated Row: " . json_encode($updated_row) . "');</script>";
-
-    // Redirect to refresh page
     header("Location: ASDocument.php?student_id=" . $student_id);
     exit();
   } catch (PDOException $e) {
     echo "<script>alert('Error: " . $e->getMessage() . "');</script>";
   }
 }
-$weighted_marks = "Incomplete"; // Default state
+$weighted_marks = "Incomplete";
 
 if ($selected_student) {
-    if (!in_array(null, $student_marks, true) && !in_array("", $student_marks, true)) {
-        $weighted_marks = round(
-            ($student_marks["Evaluation Form"] / 100 * 45) +
-            ($student_marks["Reflective Journal"] / 100 * 30) +
-            ($student_marks["Weekly Logbook"] / 100 * 5) +
-            ($student_marks["Industrial Training Report"] / 100 * 5)
-        );
-    }
+  if (!in_array(null, $student_marks, true) && !in_array("", $student_marks, true)) {
+    $weighted_marks = round(
+      (is_numeric($student_marks["Evaluation Form"]) ? $student_marks["Evaluation Form"] / 100 * 45 : 0) +
+        (is_numeric($student_marks["Reflective Journal"]) ? $student_marks["Reflective Journal"] / 100 * 30 : 0) +
+        (is_numeric($student_marks["Weekly Logbook"]) ? $student_marks["Weekly Logbook"] / 100 * 5 : 0) +
+        (is_numeric($student_marks["Industrial Training Report"]) ? $student_marks["Industrial Training Report"] / 100 * 5 : 0)
+    );
+  }
 }
 ?>
 
@@ -236,14 +224,14 @@ if ($selected_student) {
         </tr>
       </thead>
       <tbody>
-      <tr>
-  <td class="alignleft">
-    <?= isset($selected_student) ? 
-        htmlspecialchars($students[array_search($selected_student, array_column($students, 'student_id'))]['name']) . 
-        " - " . $selected_student : "No Student Selected"; ?>
-  </td>
-  <td><?= is_numeric($weighted_marks) ? "$weighted_marks/85" : "Incomplete"; ?></td>
-</tr>
+        <tr>
+          <td class="alignleft">
+            <?= isset($selected_student) ?
+              htmlspecialchars($students[array_search($selected_student, array_column($students, 'student_id'))]['name']) .
+              " - " . $selected_student : "No Student Selected"; ?>
+          </td>
+          <td><?= is_numeric($weighted_marks) ? "$weighted_marks/85" : "Incomplete"; ?></td>
+        </tr>
 
       </tbody>
     </table>
@@ -263,35 +251,29 @@ if ($selected_student) {
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 
     <script>
-      // Initialize Supabase Client
-      const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co"; // Replace with your actual Supabase URL
-      const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM"; // Replace with your actual Supabase Anon Key
+      const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co";
+      const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM";
       const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
-      const bucketName = "documents"; // Ensure this matches your Supabase Storage bucket
-      let selectedStudentId = ""; // Variable to store selected student ID
+      const bucketName = "documents";
+      let selectedStudentId = "";
 
-      // Ensure student ID updates properly
       document.getElementById("student").addEventListener("change", function() {
-        selectedStudentId = this.value.trim(); // Trim to remove spaces
+        selectedStudentId = this.value.trim();
         console.log("Updated Selected Student ID:", selectedStudentId);
       });
 
-
-      // Function to download documents
       async function downloadFile(documentType, folder) {
         if (!selectedStudentId && folder !== "templates") {
           alert("Please select a student first!");
           return;
         }
 
-        // File name format
         const fileName = folder === "templates" ? `${documentType}.docx` : `${selectedStudentId}_${documentType}.docx`;
         const filePath = `${folder}/${fileName}`;
 
         console.log("Attempting to download:", filePath);
 
-        // Generate signed URL
         const {
           data,
           error
@@ -303,7 +285,6 @@ if ($selected_student) {
           return;
         }
 
-        // Create hidden <a> tag to trigger download
         const link = document.createElement("a");
         link.href = data.signedUrl;
         link.download = fileName;
@@ -312,11 +293,9 @@ if ($selected_student) {
         document.body.removeChild(link);
       }
 
-      // Function to upload documents (Allow only .docx)
       async function uploadFile(file, documentType) {
         if (!file) return;
 
-        // Validate file extension
         const fileExtension = file.name.split('.').pop().toLowerCase();
         if (fileExtension !== 'docx') {
           alert("Only .docx files are allowed!");
@@ -352,8 +331,6 @@ if ($selected_student) {
         }
       }
 
-
-      // Attach event listeners to download buttons
       document.querySelectorAll('.download-btn').forEach(button => {
         button.addEventListener("click", function() {
           const documentType = this.getAttribute("data-document-type");
@@ -362,7 +339,6 @@ if ($selected_student) {
         });
       });
 
-      // Attach event listeners to upload inputs
       document.querySelectorAll('.upload-input').forEach(input => {
         input.addEventListener("change", function() {
           const file = this.files[0];

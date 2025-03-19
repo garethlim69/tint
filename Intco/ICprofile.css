@@ -4,20 +4,20 @@ body {
   background-color: #fff;
   font-size: 17px;
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Livvic";
 }
-/* Layout with header adjustment */
+
 .settings-container {
   display: flex;
   height: 100vh;
-  
+
 }
 
-/* Sidebar */
 .sidebar {
   width: 250px;
   background: #fff;
@@ -47,17 +47,15 @@ body {
   font-weight: bold;
 }
 
-/* Main Content */
 .settings-content {
   flex-grow: 1;
   padding: 40px;
   display: flex;
-  justify-content: center; /* Center horizontally */
+  justify-content: center;
   padding-top: 100px;
   width: 900px;
 }
 
-/* Search Bar */
 .search-bar input {
   width: 250px;
   padding: 10px;
@@ -66,7 +64,6 @@ body {
   outline: none;
 }
 
-/* Profile Section */
 .profile-section {
   margin-top: 0px;
   display: flex;
@@ -75,7 +72,6 @@ body {
   width: 900px;
 }
 
-/* Profile Picture Container */
 .profile-picture-container {
   display: flex;
   align-items: center;
@@ -119,9 +115,9 @@ body {
 
 .form-container {
   width: 100%;
-  max-width: 900px; /* Wider form */
-  padding: 30px; /* Adds spacing inside the form */
-  background: #fff; /* Optional: Adds a background for visibility */
+  max-width: 900px;
+  padding: 30px;
+  background: #fff;
 }
 
 label {
@@ -132,7 +128,7 @@ label {
 }
 
 input {
-  width: 100%; /* Ensures input fills the form width */
+  width: 100%;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -140,10 +136,11 @@ input {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 input[readonly] {
-  background-color: #f0f0f0; /* Light grey background */
-  color: #888; /* Grey text */
-  cursor: default; /* Prevent cursor change */
+  background-color: #f0f0f0;
+  color: #888;
+  cursor: default;
 }
 
 .submit-btn {
@@ -162,18 +159,21 @@ input[readonly] {
 .submit-btn:hover {
   background-color: green;
 }
+
 .title {
   font-size: 21px;
   margin: 0;
   padding-left: 15px;
 }
+
 h2 {
   font-size: 22px;
   color: rgb(83, 66, 66);
   margin-left: 65px;
-  margin-top:50px ;
+  margin-top: 50px;
   font-weight: normal;
 }
+
 .title-container {
   display: flex;
   justify-content: space-between;

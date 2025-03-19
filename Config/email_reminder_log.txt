@@ -5,3 +5,15 @@
 [2025-03-18 19:06:07] Task: Complete and Submit Industrial Training Visit Form | Due Date: 2025-03-06 | Days Until Due: 12
 [2025-03-18 19:06:07] Task: Complete and Submit Evaluation Form | Due Date: 2025-03-27 | Days Until Due: 8
 [2025-03-18 19:06:10] Reminder email sent successfully to 0363762@sd.taylors.edu.my.
+[2025-03-19 10:48:38] Task: Complete and Submit Reflective Journal | Due Date: 2025-04-04 | Days Until Due: 15
+[2025-03-19 10:48:38] Task: Complete and Submit Industrial Training Report | Due Date: 2025-04-25 | Days Until Due: 36
+[2025-03-19 10:48:38] Task: Complete and Submit Industrial Training Visit Form | Due Date: 2025-03-27 | Days Until Due: 7
+[2025-03-19 10:48:38] Task: Complete and Submit Evaluation Form | Due Date: 2025-04-01 | Days Until Due: 12
+[2025-03-19 10:48:38] Task: Complete and Submit Weekly Logbook | Due Date: 2025-04-28 | Days Until Due: 39
+[2025-03-19 10:48:38] No tasks match the reminder criteria for 0363762@sd.taylors.edu.my.
+[2025-03-19 10:49:19] Task: Complete and Submit Reflective Journal | Due Date: 2025-04-04 | Days Until Due: 15
+[2025-03-19 10:49:19] Task: Complete and Submit Industrial Training Report | Due Date: 2025-04-25 | Days Until Due: 36
+[2025-03-19 10:49:19] Task: Complete and Submit Industrial Training Visit Form | Due Date: 2025-03-27 | Days Until Due: 7
+[2025-03-19 10:49:19] Task: Complete and Submit Evaluation Form | Due Date: 2025-04-01 | Days Until Due: 12
+[2025-03-19 10:49:19] Task: Complete and Submit Weekly Logbook | Due Date: 2025-04-28 | Days Until Due: 39
+[2025-03-19 10:49:22] Reminder email sent successfully to 0363762@sd.taylors.edu.my.

@@ -14,21 +14,20 @@ if (isset($_POST["upload"])) {
       $error_message = "This file type is not allowed. Please upload a CSV file.";
     } else {
       if (($fileload = fopen($fileTmpName, 'r')) !== false) {
-        // Read and ignore the header row
         $header = fgetcsv($fileload, 0, ",");
 
-        $_SESSION['csv_data'] = []; // Store data for preview
+        $_SESSION['csv_data'] = [];
 
         while (($data = fgetcsv($fileload, 0, ",")) !== false) {
           // Map CSV columns to variables
-          $student_id = trim($data[3]); // Student ID
-          $name = trim($data[2]); // Student Name
-          $email = trim($data[7]); // Taylor's Official Email
-          $phone_number = trim($data[8]); // Mobile No
-          $program_name = trim($data[5]); // Programme
-          $company_supervisor_name = trim($data[11]); // Company Supervisor
-          $industry_supervisor_email = trim($data[12]); // Email Address
-          $company_name = trim($data[9]); // Company
+          $student_id = trim($data[3]);
+          $name = trim($data[2]);
+          $email = trim($data[7]);
+          $phone_number = trim($data[8]);
+          $program_name = trim($data[5]);
+          $company_supervisor_name = trim($data[11]);
+          $industry_supervisor_email = trim($data[12]);
+          $company_name = trim($data[9]);
 
           $password = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 8);
 
@@ -105,8 +104,8 @@ if (isset($_POST['confirm_submit']) && !empty($_SESSION['csv_data'])) {
 }
 
 if (isset($_POST['discard'])) {
-  unset($_SESSION['csv_data']); // Clear the preview session
-  header("Location: IntCoCreateStd.php"); // Reload page
+  unset($_SESSION['csv_data']);
+  header("Location: IntCoCreateStd.php");
   exit();
 }
 
@@ -133,7 +132,6 @@ if (isset($_POST['discard'])) {
 </head>
 
 <body>
-  <!-- navigationbar -->
   <div class="header">
     <div class="tint_logo">
       <img class="logo" src="picture/logo.png">
@@ -201,8 +199,8 @@ if (isset($_POST['discard'])) {
       </table>
       <br>
       <div class="button_buttom" style="text-align: right;">
-      <button type="submit" class="discard" name="discard">Discard</button>
-      <button type="submit" class="submit" name="confirm_submit">Confirm & Submit</button>
+        <button type="submit" class="discard" name="discard">Discard</button>
+        <button type="submit" class="submit" name="confirm_submit">Confirm & Submit</button>
       </div>
     </form>
   <?php endif; ?>

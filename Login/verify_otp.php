@@ -1,6 +1,6 @@
 <?php
 session_start();
-require '../Config/db.php'; // Ensure database connection
+require '../Config/db.php';
 
 if (!isset($_GET['email'])) {
   header("Location: login.php");
@@ -13,7 +13,6 @@ $error = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['otp'])) {
   $otp = trim($_POST['otp']);
 
-  // Check if OTP is valid and not expired
   $query = "SELECT otp_code, expires_at FROM otp_codes WHERE email = :email";
   $stmt = $pdo->prepare($query);
   $stmt->bindParam(':email', $email);
@@ -31,7 +30,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['otp'])) {
       $deleteStmt->bindParam(':email', $email);
       $deleteStmt->execute();
 
-      // Redirect to dashboard
       header("Location: ../Students/StudentHome.php");
       exit();
     } else {

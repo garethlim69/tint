@@ -1,11 +1,9 @@
 <?php
 
 require '../Config/profpic.php';
-require '../Config/db.php'; // Include database connection
+require '../Config/db.php';
 
 $userEmail = $_SESSION['id'];
-
-// Fetch user details from the database
 $query = "SELECT name, email, company_name FROM industrysupervisor WHERE email = :email";
 $stmt = $pdo->prepare($query);
 $stmt->bindParam(':email', $userEmail);
@@ -67,9 +65,9 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         <img class="profile_icon" id="profile-picture"
           src="picture/profile.png" style="border-radius: 50%;">
         <div class="profile_dropdown">
-          <a href="ISProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+          <a href="ISProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Settings</a>
           <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-          </div>
+        </div>
       </div>
 
 
@@ -79,10 +77,10 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
       <div class="sidebar">
         <h2>Settings</h2>
         <ul>
-    <li class="active">Profile</li>
-    <li onclick="window.location.href='ISSettingsNotifications.php'">Notifications</li>
-    <li onclick="window.location.href='ISSettingsSecurity.php'">Security</li>
-</ul>
+          <li class="active">Profile</li>
+          <li onclick="window.location.href='ISSettingsNotifications.php'">Notifications</li>
+          <li onclick="window.location.href='ISSettingsSecurity.php'">Security</li>
+        </ul>
 
       </div>
 
@@ -119,14 +117,14 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
   </div>
   <script>
     const userEmail = "<?php echo $userEmail; ?>";
-    const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co"; // Replace with your actual Supabase URL
-    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM"; // Replace with your actual Supabase Anon Key
+    const supabaseUrl = "https://rbborpwwkrfhkcqvacyz.supabase.co";
+    const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM";
 
     const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     async function uploadProfilePicture() {
       const fileInput = document.getElementById("profile-upload");
-      const file = fileInput.files[0]; // Get selected file
+      const file = fileInput.files[0];
 
       if (!file) {
         alert("Please select an image to upload.");
@@ -138,16 +136,14 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         return;
       }
 
-      const filePath = `${userEmail}.png`; // Use session email
-
-      // Upload file to Supabase Storage
+      const filePath = `${userEmail}.png`;
       const {
         data,
         error
       } = await supabase.storage
         .from("profile-pictures")
         .upload(filePath, file, {
-          upsert: true, // Overwrite existing file if exists
+          upsert: true,
           contentType: file.type
         });
 
@@ -156,17 +152,13 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         alert("Failed to upload profile picture.");
         return;
       }
-
-      // Get public URL for the uploaded image
       const {
         data: urlData
       } = supabase.storage
         .from("profile-pictures")
         .getPublicUrl(filePath);
-
-      // Update profile picture preview
       document.querySelectorAll("#profile-picture").forEach(img => {
-        img.src = urlData.publicUrl; // Set to default profile picture
+        img.src = urlData.publicUrl;
       });
 
       alert("Profile picture uploaded successfully!");
@@ -178,9 +170,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
       const confirmDelete = confirm("Are you sure you want to remove your profile picture?");
       if (!confirmDelete) return;
 
-      const filePath = `${userEmail}.png`; // Profile picture path in Supabase
-
-      // Delete the profile picture from Supabase Storage
+      const filePath = `${userEmail}.png`;
       const {
         error
       } = await supabase.storage
@@ -192,19 +182,15 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         alert("Error deleting profile picture.");
         return;
       }
-
-      //Reset profile picture to default across the UI
       document.querySelectorAll("#profile-picture").forEach(img => {
-        img.src = "picture/profile.png"; // Set to default profile picture
+        img.src = "picture/profile.png";
       });
 
       alert("Profile picture removed successfully!");
     }
 
     async function loadProfilePicture() {
-      const filePath = `${userEmail}.png`; // Path to user's profile picture
-
-      // Get the public URL from Supabase Storage
+      const filePath = `${userEmail}.png`;
       const {
         data
       } = supabase.storage.from("profile-pictures").getPublicUrl(filePath);
@@ -213,10 +199,10 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
         try {
           const response = await fetch(data.publicUrl, {
             method: "HEAD"
-          }); // Only check if it exists
+          });
           if (response.ok) {
             document.querySelectorAll("#profile-picture").forEach(img => {
-              img.src = data.publicUrl; // Set profile picture
+              img.src = data.publicUrl;
             });
             return;
           }
@@ -224,8 +210,6 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
           console.error("Error fetching profile picture:", error);
         }
       }
-
-      //If the image does not exist, set all profile pictures to default
       document.querySelectorAll("#profile-picture").forEach(img => {
         img.src = "picture/profile.png";
       });

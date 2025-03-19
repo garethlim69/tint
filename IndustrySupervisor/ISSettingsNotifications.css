@@ -4,20 +4,20 @@ body {
   background-color: #fff;
   font-size: 17px;
 }
+
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   font-family: "Livvic";
 }
-/* Layout with header adjustment */
+
 .settings-container {
   display: flex;
   height: 100vh;
-  
+
 }
 
-/* Sidebar */
 .sidebar {
   width: 250px;
   background: #fff;
@@ -47,16 +47,14 @@ body {
   font-weight: bold;
 }
 
-/* Main Content */
 .settings-content {
   flex-grow: 1;
   padding: 40px;
   display: flex;
-  justify-content: center; /* Center horizontally */
+  justify-content: center;
   padding-top: 100px;
 }
 
-/* Search Bar */
 .search-bar input {
   width: 250px;
   padding: 10px;
@@ -65,7 +63,6 @@ body {
   outline: none;
 }
 
-/* Profile Section */
 .profile-section {
   margin-top: 0px;
   display: flex;
@@ -74,7 +71,6 @@ body {
   width: 900px;
 }
 
-/* Profile Picture Container */
 .profile-picture-container {
   display: flex;
   align-items: center;
@@ -118,9 +114,9 @@ body {
 
 .form-container {
   width: 100%;
-  max-width: 900px; /* Wider form */
-  padding: 30px; /* Adds spacing inside the form */
-  background: #fff; /* Optional: Adds a background for visibility */
+  max-width: 900px;
+  padding: 30px;
+  background: #fff;
 }
 
 label {
@@ -131,7 +127,7 @@ label {
 }
 
 input {
-  width: 100%; /* Ensures input fills the form width */
+  width: 100%;
   padding: 10px;
   font-size: 16px;
   border: 1px solid #ccc;
@@ -139,10 +135,11 @@ input {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
 input[readonly] {
-  background-color: #f0f0f0; /* Light grey background */
-  color: #888; /* Grey text */
-  cursor: default; /* Prevent cursor change */
+  background-color: #f0f0f0;
+  color: #888;
+  cursor: default;
 }
 
 .submit-btn {
@@ -161,16 +158,19 @@ input[readonly] {
 .submit-btn:hover {
   background-color: green;
 }
+
 .title {
   font-size: 21px;
   margin: 0;
   padding-left: 15px;
 }
+
 h2 {
   font-size: 22px;
   color: rgb(83, 66, 66);
   font-weight: normal;
 }
+
 .title-container {
   display: flex;
   justify-content: space-between;
@@ -178,22 +178,21 @@ h2 {
   width: 100%;
   padding-top: 30px;
 }
-/* Notification setting section */
+
 .notification-setting {
   display: flex;
   align-items: center;
-  justify-content: space-between; /* Push label to the left and toggle to the right */
+  justify-content: space-between;
   width: 100%;
   margin: 15px 0;
 }
+
 #reminderDaysContainer {
   display: none;
   margin-top: 10px;
   width: 100%;
 }
 
-
-/* Toggle switch styling */
 .switch {
   position: relative;
   display: inline-block;
@@ -231,15 +230,14 @@ h2 {
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: green;
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(20px);
 }
 
-/* Hidden dropdown style */
 #reminderDaysContainer {
   margin-top: 10px;
   display: none;
@@ -254,14 +252,14 @@ input:checked + .slider:before {
   border-radius: 5px;
   cursor: pointer;
   display: block;
-  margin-left: auto; /* Push button to the right */
+  margin-left: auto;
 }
 
 
 .save-btn:hover {
   background-color: green;
 }
-/* Toggle switch styling */
+
 .switch {
   position: relative;
   display: inline-block;
@@ -299,15 +297,14 @@ input:checked + .slider:before {
   border-radius: 50%;
 }
 
-input:checked + .slider {
+input:checked+.slider {
   background-color: rgb(9, 199, 9);
 }
 
-input:checked + .slider:before {
+input:checked+.slider:before {
   transform: translateX(20px);
 }
 
-/* Left align all section titles inside settings */
 .profile-section h2 {
   text-align: left;
   width: 100%;
@@ -315,7 +312,7 @@ input:checked + .slider:before {
 }
 
 
-.sidebar h2{
+.sidebar h2 {
   margin-left: 65px;
-  margin-top:50px ;
+  margin-top: 50px;
 }

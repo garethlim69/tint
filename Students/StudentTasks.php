@@ -6,7 +6,7 @@ $studentId = $_SESSION['id'];
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["student_id"]) && isset($_POST["completed_tasks"])) {
   $studentId = intval($_POST["student_id"]);
   $completedTasks = intval($_POST["completed_tasks"]);
-  $action = $_POST["action"]; // "increase" or "decrease"
+  $action = $_POST["action"];
 
   if ($studentId > 0) {
     if ($action === "increase") {
@@ -24,15 +24,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST["student_id"]) && isse
   exit;
 }
 
-
-
-// Fetch completed tasks count from student table
 $stmt = $pdo->prepare("SELECT completed_tasks FROM student WHERE student_id = ?");
 $stmt->execute([$studentId]);
 $studentData = $stmt->fetch(PDO::FETCH_ASSOC);
 $completedTasks = $studentData['completed_tasks'] ?? 0;
 
-// Fetch all tasks
 $stmt = $pdo->query("SELECT task_name, due_date FROM studenttasks ORDER BY due_date ASC");
 $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -51,11 +47,9 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </head>
 
 <body>
-  <!-- navigationbar -->
   <div class="header">
     <div class="tint_logo">
-      <img class="logo"
-        src="picture/logo.png">
+      <img class="logo" src="picture/logo.png">
       <p class="tint_title">
         t-int
       </p>
@@ -81,7 +75,8 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
       </div>
     </div>
     <div class="profile">
-      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
+      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>"
+        style="border-radius: 50%;">
       <div class="profile_dropdown">
         <a href="StudentSettingsProfile.php"> <img class="settingicon" src="picture/setting.png"> Settings</a>
         <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
@@ -90,7 +85,6 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 
   </div>
-  <!-- Tasks -->
   <div class="title" style="padding-right: 100pc; font-size: 21px;">
     <h2>Tasks</h2>
   </div>
@@ -98,7 +92,6 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <?php if (!empty($tasks)): ?>
       <?php foreach ($tasks as $index => $task): ?>
         <?php
-        // Determine if the task is completed
         $isCompleted = ($index < $completedTasks);
         $isLatestCompleted = ($index + 1 == $completedTasks);
         $dotClass = $isCompleted ? "green" : "red";
@@ -115,11 +108,7 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             <p class="date"><?= $taskStatusText; ?></p>
           </div>
           <input type="radio" class="task-radio <?= ($isCompleted ? 'forced-checked' : '') ?>"
-            data-task-number="<?= $index + 1; ?>"
-            name="task"
-            <?= $isCompleted ? "checked" : ""; ?>
-            <?= ($index + 1 < $completedTasks) ? "disabled" : ""; ?>
-            data-latest="<?= $isLatestCompleted ? 'true' : 'false'; ?>">
+            data-task-number="<?= $index + 1; ?>" name="task" <?= $isCompleted ? "checked" : ""; ?>     <?= ($index + 1 < $completedTasks) ? "disabled" : ""; ?> data-latest="<?= $isLatestCompleted ? 'true' : 'false'; ?>">
         </div>
       <?php endforeach; ?>
     <?php else: ?>
@@ -128,21 +117,21 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
   </div>
 
   <script>
-    $(document).ready(function() {
-      $(".task-radio").click(function(event) {
+    $(document).ready(function () {
+      $(".task-radio").click(function (event) {
         let taskNumber = $(this).data("task-number");
         let studentId = <?= json_encode($studentId); ?>;
-        let isLatest = $(this).attr("data-latest") === "true"; // Check if it's the latest completed task
+        let isLatest = $(this).attr("data-latest") === "true";
         let action;
 
         if (this.checked && !isLatest) {
-          action = "increase"; // Increase completed_tasks if a new task is checked
+          action = "increase";
         } else if (this.checked && isLatest) {
-          action = "decrease"; // Decrease completed_tasks if the latest task is unchecked
-          event.preventDefault(); // Prevent default radio behavior
-          $(this).prop("checked", false); // Manually uncheck
+          action = "decrease";
+          event.preventDefault();
+          $(this).prop("checked", false);
         } else {
-          return; // Do nothing if it's a previously completed task
+          return;
         }
 
         console.log("Task Number:", taskNumber, "Action:", action);
@@ -156,7 +145,7 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
             action: action
           },
           dataType: "json",
-          success: function(response) {
+          success: function (response) {
             if (response.status === "success") {
               console.log("Task updated:", response);
               location.reload();
@@ -165,7 +154,7 @@ $tasks = $stmt->fetchAll(PDO::FETCH_ASSOC);
               console.error("AJAX Error Response:", response);
             }
           },
-          error: function(jqXHR, textStatus, errorThrown) {
+          error: function (jqXHR, textStatus, errorThrown) {
             alert("AJAX request failed: " + textStatus + " - " + errorThrown);
             console.error("Full response:", jqXHR.responseText);
           }

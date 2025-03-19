@@ -1,6 +1,6 @@
 <?php
-require '../Config/db.php';  // Database connection
-require '../composer/vendor/autoload.php'; // Include PHPMailer
+require '../Config/db.php';
+require '../composer/vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -33,7 +33,7 @@ if ($user) {
   $tasksToSend = [];
 
   foreach ($tasks as $task) {
-    $dueDate = new DateTime($task['due_date']); 
+    $dueDate = new DateTime($task['due_date']);
     $daysUntilDue = $today->diff($dueDate)->days;
 
     logMessage("Task: " . $task['task_name'] . " | Due Date: " . $task['due_date'] . " | Days Until Due: " . $daysUntilDue);

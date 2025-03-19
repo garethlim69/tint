@@ -1,11 +1,9 @@
 <?php
-// Supabase Credentials
 define("SUPABASE_URL", "https://rbborpwwkrfhkcqvacyz.supabase.co");
 define("SUPABASE_KEY", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJiYm9ycHd3a3JmaGtjcXZhY3l6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAwMzU2OTQsImV4cCI6MjA1NTYxMTY5NH0.pMLuryar6iAlkd110WblQtz8T_XdrKOpZEQHksHpuuM");
 define("STORAGE_BUCKET", "documents");
 
-require '../Config/profpic.php'; 
-// SESSION VARIABLES
+require '../Config/profpic.php';
 $file_type = '.docx';
 ?>
 
@@ -23,8 +21,6 @@ $file_type = '.docx';
 </head>
 
 <body>
-
-  <!-- navigationbar -->
   <div class="header">
     <div class="tint_logo">
       <img class="logo"
@@ -42,11 +38,11 @@ $file_type = '.docx';
 
     </div>
     <div class="profile">
-    <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
+      <img class="profile_icon" id="profile-picture" src="<?php echo $_SESSION['profile_picture']; ?>" style="border-radius: 50%;">
       <div class="profile_dropdown">
-        <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png">  Settings</a>
+        <a href="ICProfileSetting.php"> <img class="settingicon" src="picture/setting.png"> Settings</a>
         <a href="../Login/logout.php"> <img class="logouticon" src="picture/logout.png">Log Out</a>
-        </div>
+      </div>
     </div>
 
 
@@ -55,6 +51,7 @@ $file_type = '.docx';
   <div class="title-container">
     <h2 class="title">Documents</h2>
   </div>
+  <p style="color: grey; text-align: right; padding-right: 20px; font-size: 15px;">(only .docx files accepted)</p>
   <div class="table-container">
     <table>
       <thead>
@@ -87,27 +84,24 @@ $file_type = '.docx';
                 <img src="picture/upload.png" alt="Upload" width="35" height="35" style="cursor: pointer;">
               </label>
             </td>
-            <td id="status<?php echo $index; ?>">Checking...</td> <!-- Moved submission status here -->
+            <td id="status<?php echo $index; ?>">Checking...</td>
           </tr>
         <?php } ?>
       </tbody>
     </table>
   </div>
   <script>
-    // Initialize Supabase Client
     const supabaseUrl = "<?php echo SUPABASE_URL; ?>";
     const supabaseAnonKey = "<?php echo SUPABASE_KEY; ?>";
     const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
     const bucketName = "<?php echo STORAGE_BUCKET; ?>";
-    const folder = "templates"; // Folder inside the documents bucket
+    const folder = "templates";
 
-    // Function to check file existence within the "templates" folder
     async function checkFileStatus(fileName, statusId) {
-      const folder = "templates"; // Ensure folder is correctly set
+      const folder = "templates";
       console.log(`Checking file: ${folder}/${fileName}`);
 
-      // Fetch the list of files inside the "templates" folder
       const {
         data,
         error
@@ -119,9 +113,8 @@ $file_type = '.docx';
         return;
       }
 
-      console.log("Supabase Response:", data); // Debugging log to see actual response
+      console.log("Supabase Response:", data);
 
-      // Find the exact file inside the folder
       const file = data.find(file => file.name === fileName);
 
       if (!file) {
@@ -129,40 +122,35 @@ $file_type = '.docx';
         return;
       }
 
-      console.log("File Found:", file); // Debugging log when a match is found
+      console.log("File Found:", file);
 
-      // Get `updated_at` timestamp from the JSON response
       const lastUpdated = file.updated_at || "Unknown Time";
 
-      // Convert timestamp to readable format
       const formattedDate = lastUpdated !== "Unknown Time" ? new Date(lastUpdated).toLocaleString() : "Uploaded (Date Not Available)";
 
-      // Update the submission status in the table
       document.getElementById(statusId).innerText = `${formattedDate}`;
     }
 
-
-    // Function to upload a file to the "templates" folder
     async function uploadFile(file, fileType, statusId) {
       if (!file) return;
 
-      // Ensure fileType is provided
       if (!fileType) {
         console.error("Upload failed: File type is null or undefined!");
         alert("Upload failed: File type is not set!");
         return;
       }
 
-      // Format the filename correctly
-      const fileExtension = file.name.split('.').pop();
+      const fileExtension = file.name.split('.').pop().toLowerCase();
+        if (fileExtension !== 'docx') {
+          alert("Only .docx files are allowed!");
+          return;
+        }
       const fileName = `${fileType}.${fileExtension}`;
 
-      // Construct the full path inside the templates folder
       const filePath = `${folder}/${fileName}`;
 
-      console.log(`Uploading to: ${filePath}`); // Debugging log
+      console.log(`Uploading to: ${filePath}`);
 
-      // Upload file to Supabase
       const {
         data,
         error
@@ -176,11 +164,10 @@ $file_type = '.docx';
       } else {
         alert(`${fileType} successfully uploaded!`);
         console.log("Upload Successful:", data);
-        checkFileStatus(fileName, statusId); // Refresh status after upload
+        checkFileStatus(fileName, statusId);
       }
     }
 
-    // Attach event listeners to file inputs
     document.querySelectorAll('input[type="file"]').forEach((input, index) => {
       input.addEventListener("change", function() {
         const file = this.files[0];
@@ -190,7 +177,6 @@ $file_type = '.docx';
       });
     });
 
-    // Function to check the status of all files inside the "templates" folder
     function checkAllFiles() {
       const filesToCheck = [{
           name: "Industrial Training Visit Form<?php echo $file_type; ?>",
@@ -219,7 +205,6 @@ $file_type = '.docx';
       });
     }
 
-    // Run check on page load
     window.onload = checkAllFiles;
   </script>
 </body>

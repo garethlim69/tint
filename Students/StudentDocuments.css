@@ -4,16 +4,17 @@ body {
   background-color: #fff;
   font-size: 17px;
 }
+
 h2 {
   font-size: 22px;
   color: rgb(83, 66, 66);
   margin-left: 65px;
-  margin-top:50px ;
+  margin-top: 50px;
   font-weight: normal;
 }
 
 .table-container {
-  margin-top: 0px; /* Prevents overlap with fixed header */
+  margin-top: 0px;
   padding-top: 0px;
   display: flex;
   justify-content: center;
@@ -23,17 +24,20 @@ h2 {
 
 table {
   border-collapse: separate;
-  border-spacing: 60px; /* Absolute spacing between cells */
+  border-spacing: 60px;
   text-align: left;
 }
-.alignleft{
+
+.alignleft {
   text-align: left;
 }
-th, td {
+
+th,
+td {
   padding: 10px;
   padding-right: 100px;
   padding-left: 85px;
-  text-align:center;
+  text-align: center;
 }
 
 th {
@@ -45,14 +49,16 @@ td i {
   font-size: 18px;
 }
 
-.download-btn, .download-template-btn {
+.download-btn,
+.download-template-btn {
   background: none;
   border: none;
   padding: 0;
   cursor: pointer;
 }
 
-.download-btn img, .download-template-btn img {
+.download-btn img,
+.download-template-btn img {
   width: 35px;
   height: 35px;
   display: block;

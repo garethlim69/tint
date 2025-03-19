@@ -4,112 +4,115 @@ body {
   background-color: #fff;
   font-size: 17px;
 }
-.cont{
-    border-style: solid;
-    margin-bottom: 70px;
+
+.cont {
+  border-style: solid;
+  margin-bottom: 70px;
 
 }
+
 .content2 {
-    margin-left: 60px;
-    margin-right: 700px;
-    display: inline-block;
+  margin-left: 60px;
+  margin-right: 700px;
+  display: inline-block;
 }
+
 .content3 {
-    display: inline-block;
-}
-.StudentContactsTable
-{
-    border-collapse: collapse;
-    margin: 50px;
-    width: 90%;
-    min-width: 200px;
+  display: inline-block;
 }
 
-.StudentContactsTable thead th
-{
-    background-color: lightgray;
-    text-align: left;
-    padding-left: 20px;
+.StudentContactsTable {
+  border-collapse: collapse;
+  margin: 50px;
+  width: 90%;
+  min-width: 200px;
 }
 
-.StudentContactsTable tbody td{
-   
-    padding: 7px ;
-    border-bottom: 1px solid lightgray;
-    padding-left: 19px;
-     
-}
-.createstd{
-    position: absolute;
-    left: 100px;  /* Fixed position from the left */
-    top: 100px;
-
-}
-.import{
-    position: absolute;
-    left: 1400px;  /* Fixed position from the left */
-    top: 140px;
-}
-.discard{
-    background-color:lightgray;
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 20px;
-}
-.submit{
-    background-color:rgb(56, 240, 99);
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 20px;
-    
+.StudentContactsTable thead th {
+  background-color: lightgray;
+  text-align: left;
+  padding-left: 20px;
 }
 
+.StudentContactsTable tbody td {
 
+  padding: 7px;
+  border-bottom: 1px solid lightgray;
+  padding-left: 19px;
 
-.button{
-display: flex;
-flex-direction: row;
-justify-content: space-between;
-margin-top: 30px;
-margin-left: 32px;
 }
 
-.mybutton{
-    margin-right: 100px;
-    margin-top: 28px;
-    padding-right: 20px;
-    padding-left: 20px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: rgb(233, 233, 233);
-    border-radius: 15px;
-    
+.createstd {
+  position: absolute;
+  left: 100px;
+  top: 100px;
+
 }
 
-.importbutton{
-    background-color:rgb(202, 202, 202);
-    border: none;
-    padding: 8px 12px;
-    cursor: pointer;
-    font-size: 14px;
-    border-radius: 20px;
+.import {
+  position: absolute;
+  left: 1400px;
+  top: 140px;
+}
+
+.discard {
+  background-color: lightgray;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 20px;
+}
+
+.submit {
+  background-color: rgb(56, 240, 99);
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 20px;
+
+}
+
+.button {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 30px;
+  margin-left: 32px;
+}
+
+.mybutton {
+  margin-right: 100px;
+  margin-top: 28px;
+  padding-right: 20px;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: rgb(233, 233, 233);
+  border-radius: 15px;
+
+}
+
+.importbutton {
+  background-color: rgb(202, 202, 202);
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 14px;
+  border-radius: 20px;
 }
 
 
-.button_bottom{
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    margin: 90px;
-    gap: 20px;
+.button_bottom {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  margin: 90px;
+  gap: 20px;
 }
 
-.CreateAS{
-    font-weight: normal; 
-    margin-left: 30px;
+.CreateAS {
+  font-weight: normal;
+  margin-left: 30px;
 }
-

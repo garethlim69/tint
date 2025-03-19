@@ -1,7 +1,7 @@
 <?php
 session_start();
-require '../Config/db.php'; // Ensure database connection
-require '../composer/vendor/autoload.php'; // Include PHPMailer
+require '../Config/db.php';
+require '../composer/vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -24,25 +24,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
       if ($stmt->fetch(PDO::FETCH_ASSOC)) {
         $userFound = true;
 
-        // Generate a new random password
         $newPassword = substr(str_shuffle("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"), 0, 10);
         $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
 
-        // Update password in the database
         $updateQuery = "UPDATE $role SET password = :new_password WHERE email = :email";
         $updateStmt = $pdo->prepare($updateQuery);
         $updateStmt->bindParam(':new_password', $hashedPassword);
         $updateStmt->bindParam(':email', $email);
         $updateStmt->execute();
 
-        // Send email with the new password
         $mail = new PHPMailer(true);
         try {
           $mail->isSMTP();
           $mail->Host = 'smtp.gmail.com';
           $mail->SMTPAuth = true;
           $mail->Username = 'garethlimjs@gmail.com';
-          $mail->Password = 'gktl jblg vkpl vnqi'; // Use an app password if 2FA is enabled
+          $mail->Password = 'gktl jblg vkpl vnqi';
           $mail->SMTPSecure = 'tls';
           $mail->Port = 587;
 
