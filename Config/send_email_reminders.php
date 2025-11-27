@@ -49,8 +49,8 @@ if ($user) {
       $mail->isSMTP();
       $mail->Host = 'smtp.gmail.com';
       $mail->SMTPAuth = true;
-      $mail->Username = 'garethlimjs@gmail.com';
-      $mail->Password = 'gktl jblg vkpl vnqi';
+      $mail->Username = '';
+      $mail->Password = '';
       $mail->SMTPSecure = 'tls';
       $mail->Port = 587;
 
@@ -84,3 +84,4 @@ if ($user) {
   logMessage("No email reminders enabled for $demoUserEmail.");
   echo "No email reminders enabled for $demoUserEmail.\n";
 }
+
